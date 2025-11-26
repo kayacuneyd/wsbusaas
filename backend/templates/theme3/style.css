@@ -1,0 +1,16 @@
+:root {
+  --primary-color: #e11d48;
+  --secondary-color: #22d3ee;
+  --font-family: 'Manrope', sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin:0; font-family: var(--font-family); background: radial-gradient(circle at 20% 20%, rgba(34,211,238,0.08), transparent 25%), #0f0a1f; color:#f8fafc; }
+.hero { text-align:center; padding:100px 20px 60px; max-width:960px; margin:0 auto; }
+.badge { display:inline-block; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); padding:6px 12px; border-radius:999px; font-size:0.8rem; letter-spacing:0.04em; }
+.hero h1 { font-size:3rem; margin:20px 0 10px; color:var(--primary-color); }
+.hero p { color:#cbd5e1; max-width:620px; margin:0 auto 24px; }
+.actions { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; }
+.primary { background:linear-gradient(120deg, var(--primary-color), var(--secondary-color)); color:#0b0f14; padding:14px 20px; border:none; border-radius:10px; font-weight:700; }
+.ghost { background:transparent; border:1px solid #334155; color:#e2e8f0; padding:14px 20px; border-radius:10px; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:16px; padding:24px; max-width:960px; margin:0 auto 60px; }
+.cell { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); padding:18px; border-radius:12px; color:var(--secondary-color); text-align:center; }
