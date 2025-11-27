@@ -64,25 +64,27 @@
 
 <form on:submit|preventDefault={handleSubmit} class="space-y-6">
   <div>
-    <label for="order-email" class="block text-sm font-medium text-gray-700">Email Adresi</label>
-    <input 
-      type="email" 
-      id="order-email" 
-      bind:value={customerEmail} 
-      required 
-      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border"
-    />
+    <label class="block text-sm font-medium text-gray-700">
+      Email Adresi
+      <input 
+        type="email" 
+        bind:value={customerEmail} 
+        required 
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border"
+      />
+    </label>
   </div>
 
   <div>
-    <label for="order-name" class="block text-sm font-medium text-gray-700">Ad Soyad</label>
-    <input 
-      type="text" 
-      id="order-name" 
-      bind:value={customerName} 
-      required 
-      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border"
-    />
+    <label class="block text-sm font-medium text-gray-700">
+      Ad Soyad
+      <input 
+        type="text" 
+        bind:value={customerName} 
+        required 
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border"
+      />
+    </label>
   </div>
 
   {#if error}
