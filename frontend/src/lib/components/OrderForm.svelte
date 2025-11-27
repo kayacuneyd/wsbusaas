@@ -64,7 +64,7 @@
     <input 
       type="email" 
       id="email" 
-      bind:value={$orderStore.customerEmail} 
+      bind:value={customerEmail} 
       required 
       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border"
     />
@@ -75,18 +75,8 @@
     <input 
       type="text" 
       id="name" 
-      bind:value={$orderStore.customerName} 
+      bind:value={customerName} 
       required 
-      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border"
-    />
-  </div>
-
-  <div>
-    <label for="business" class="block text-sm font-medium text-gray-700">İşletme Adı (Opsiyonel)</label>
-    <input 
-      type="text" 
-      id="business" 
-      bind:value={$orderStore.businessName} 
       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border"
     />
   </div>
