@@ -28,8 +28,6 @@
           token: data.token,
           user: data.user
         });
-      if (data.token) {
-        login(data.token, data.user);
         
         // Check cart
         let redirectUrl = '/dashboard';
