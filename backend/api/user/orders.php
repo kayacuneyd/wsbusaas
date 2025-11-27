@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../config/Database.php';
+require_once __DIR__ . '/../../services/JwtService.php';
+
+use App\Services\JwtService;
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -23,10 +26,9 @@ if (!empty($authHeader)) {
         $token = $authHeader;
     }
 
-    $decoded = base64_decode($token);
-    $parts = explode(':', $decoded);
-    if (count($parts) >= 2) {
-        $userId = $parts[0];
+    $decoded = JwtService::decode($token);
+    if ($decoded && isset($decoded['sub'])) {
+        $userId = $decoded['sub'];
     }
 }
 

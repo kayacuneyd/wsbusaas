@@ -1,4 +1,22 @@
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+// API URL Configuration
+// Production: Set VITE_API_URL in Vercel environment variables to https://bezmidar.de/api
+// Development: Defaults to localhost:8000
+const getApiUrl = () => {
+  // Check if VITE_API_URL is explicitly set
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  
+  // Production detection: if we're not on localhost, use production backend
+  if (typeof window !== 'undefined' && !window.location.hostname.includes('localhost')) {
+    return 'https://bezmidar.de/api';
+  }
+  
+  // Development default
+  return 'http://localhost:8000/api';
+};
+
+export const API_URL = getApiUrl();
 
 export async function checkDomain(domain: string, tld: string) {
   const response = await fetch(`${API_URL}/check-domain`, {

@@ -2,8 +2,10 @@
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/../services/OrderService.php';
+require_once __DIR__ . '/../services/JwtService.php';
 
 use App\Services\OrderService;
+use App\Services\JwtService;
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -26,11 +28,9 @@ if (!empty($authHeader)) {
     } else {
         $token = $authHeader;
     }
-
-    $decoded = base64_decode($token);
-    $parts = explode(':', $decoded);
-    if (count($parts) >= 2) {
-        $userId = $parts[0];
+    $decoded = JwtService::decode($token);
+    if ($decoded && isset($decoded['sub'])) {
+        $userId = $decoded['sub'];
     }
 }
 
@@ -42,6 +42,14 @@ if (!$userId) {
 }
 
 $orderService = new OrderService();
+$conn = $orderService->conn;
+
+// Ensure settings table exists (for legacy databases)
+$conn->exec("CREATE TABLE IF NOT EXISTS settings (
+    `key` VARCHAR(100) PRIMARY KEY,
+    `value` TEXT,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
@@ -66,13 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $baseUrl = $stmtSettings->fetchColumn();
 
         if (!$baseUrl) {
-            // Fallback to environment variable rather than hard-coded secret
-            $baseUrl = $_ENV['PAYMENT_BASE_URL'] ?? null;
-        }
-
-        if (!$baseUrl) {
             http_response_code(500);
-            echo json_encode(['success' => false, 'error' => 'Payment URL is not configured']);
+            echo json_encode(['success' => false, 'error' => 'Payment URL is not configured. Please set it in Admin > Settings.']);
             exit;
         }
 
@@ -104,6 +107,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Simple parsing if .htaccess passes route
     $route = $_GET['route'] ?? '';
+
+    // If no route is provided (e.g. Apache/Nginx rewrite not setting it), attempt to parse from REQUEST_URI
+    if (empty($route)) {
+        $uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        // Expecting something like /api/orders/WB123
+        $segments = explode('/', trim($uriPath, '/'));
+        $ordersIndex = array_search('orders', $segments);
+        if ($ordersIndex !== false && isset($segments[$ordersIndex + 1])) {
+            $route = 'orders/' . $segments[$ordersIndex + 1];
+        }
+    }
+
     // If route is "orders/WB123", we extract WB123
     $parts = explode('/', $route);
     $orderId = end($parts);

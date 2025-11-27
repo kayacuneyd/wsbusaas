@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../config/Database.php';
+require_once __DIR__ . '/../../services/JwtService.php';
+
+use App\Services\JwtService;
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -14,7 +17,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // Simple Auth Check
 $headers = getallheaders();
 $authHeader = $headers['Authorization'] ?? '';
-if (empty($authHeader)) {
+$decoded = null;
+
+if (!empty($authHeader)) {
+    if (preg_match('/Bearer\\s(\\S+)/', $authHeader, $matches)) {
+        $token = $matches[1];
+    } else {
+        $token = $authHeader;
+    }
+    $decoded = JwtService::decode($token);
+}
+
+if (!$decoded || ($decoded['role'] ?? '') !== 'admin') {
     http_response_code(401);
     echo json_encode(['success' => false, 'error' => 'Unauthorized']);
     exit;

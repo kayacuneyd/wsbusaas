@@ -1,11 +1,16 @@
 <?php
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../config/Database.php';
+require_once __DIR__ . '/../../services/JwtService.php';
+
+use App\Services\JwtService;
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+$allowedOrigin = $_ENV['FRONTEND_URL'] ?? '*';
+header('Access-Control-Allow-Origin: ' . $allowedOrigin);
+header('Vary: Origin');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
@@ -30,8 +35,12 @@ $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($user && password_verify($password, $user['password_hash'])) {
-    // Generate simple token (In production use JWT)
-    $token = base64_encode($user['id'] . ':' . time());
+    // Generate JWT token
+    $token = JwtService::generate([
+        'sub' => $user['id'],
+        'username' => $user['username'],
+        'role' => 'admin'
+    ]);
 
     echo json_encode(['success' => true, 'token' => $token]);
 } else {

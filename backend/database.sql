@@ -49,6 +49,13 @@ CREATE TABLE IF NOT EXISTS webhook_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Key/value application settings (e.g., payment_url)
+CREATE TABLE IF NOT EXISTS settings (
+    `key` VARCHAR(100) PRIMARY KEY,
+    `value` TEXT,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 -- Initial Admin User (password: admin123)
 -- Hash generated with password_hash('admin123', PASSWORD_BCRYPT)
 INSERT IGNORE INTO admin_users (username, email, password_hash) 

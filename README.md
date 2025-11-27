@@ -20,8 +20,13 @@
 ### 3. Frontend Deployment (Vercel)
 1. Push the `frontend/` directory to GitHub.
 2. Import the project in Vercel.
-3. Set the Environment Variable `VITE_API_URL` to your backend URL (e.g., `https://api.yourdomain.com/api`).
-4. Deploy.
+3. **IMPORTANT**: Set the Environment Variable `VITE_API_URL` to your backend URL:
+   - Go to Vercel Dashboard → Your Project → Settings → Environment Variables
+   - Add: `VITE_API_URL` = `https://bezmidar.de/api` (or your backend domain)
+   - Make sure to set it for **Production**, **Preview**, and **Development** environments
+4. Redeploy after setting the environment variable.
+
+**Note**: If `VITE_API_URL` is not set, the app will automatically use `https://bezmidar.de/api` in production, but it's recommended to set it explicitly.
 
 ### 4. Google Apps Script Integration
 1. Go to [script.google.com](https://script.google.com) and create a new project.
