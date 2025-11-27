@@ -40,14 +40,18 @@
   <h2 class="text-2xl font-bold text-center mb-6">Hayalinizdeki Domain'i Kontrol Edin</h2>
   
   <div class="flex flex-col md:flex-row gap-4 mb-6">
+    <label for="domain-input" class="sr-only">Domain Adı</label>
     <input 
       type="text" 
+      id="domain-input"
       bind:value={domain} 
       placeholder="meingeschaeft" 
       class="flex-grow p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
       on:keydown={(e) => e.key === 'Enter' && handleCheck()}
     />
+    <label for="tld-select" class="sr-only">Uzantı</label>
     <select 
+      id="tld-select"
       bind:value={tld} 
       class="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white"
     >
