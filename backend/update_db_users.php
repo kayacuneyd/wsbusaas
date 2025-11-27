@@ -6,10 +6,11 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
-$host = $_ENV['DB_HOST'] ?? '127.0.0.1';
-$user = $_ENV['DB_USER'] ?? 'root';
-$pass = $_ENV['DB_PASS'] ?? '';
-$db = $_ENV['DB_NAME'] ?? 'website_builder';
+// Production Defaults (Hostinger)
+$host = $_ENV['DB_HOST'] ?? 'localhost';
+$user = $_ENV['DB_USER'] ?? 'u553245641_websaas';
+$pass = $_ENV['DB_PASS'] ?? 'Kayacuneyd1453!';
+$db = $_ENV['DB_NAME'] ?? 'u553245641_websaas';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);

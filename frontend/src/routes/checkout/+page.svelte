@@ -1,21 +1,36 @@
 ```html
 <script lang="ts">
   import { page } from '$app/stores';
-  import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
-  import { orderStore } from '$lib/stores/order';
   import { customerAuth } from '$lib/stores/auth';
+  import { cart } from '$lib/stores/cart';
   import OrderForm from '$lib/components/OrderForm.svelte';
+  import { onMount } from 'svelte';
 
-  let domain = $page.url.searchParams.get('domain') || '';
-  let packageType = $page.url.searchParams.get('package') || 'starter';
+  let domain = '';
+  let packageType = 'starter';
 
   onMount(() => {
-    if (!$customerAuth.isAuthenticated) {
-      goto(`/login?redirect=${encodeURIComponent($page.url.pathname + $page.url.search)}`);
+    // 1. Check URL params first
+    const urlDomain = $page.url.searchParams.get('domain');
+    const urlPackage = $page.url.searchParams.get('package');
+
+    if (urlDomain) {
+      domain = urlDomain;
+      packageType = urlPackage || 'starter';
+      
+      // Update cart
+      cart.set({ domain, packageType, price: 0 }); // Price logic can be added later
+    } else if ($cart) {
+      // 2. Fallback to Cart
+      domain = $cart.domain;
+      packageType = $cart.packageType;
     }
-    if (domain) {
-      $orderStore.domain = domain;
+
+    // 3. Auth Check
+    if (!$customerAuth.isAuthenticated) {
+      // Redirect to login, preserving checkout intent
+      goto(`/login?redirect=/checkout`);
     }
   });
 </script>

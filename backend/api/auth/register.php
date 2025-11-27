@@ -28,47 +28,56 @@ if (empty($email) || empty($password)) {
     exit;
 }
 
-$database = new App\Config\Database();
-$conn = $database->getConnection();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-// Check if email exists
-$query = "SELECT id FROM users WHERE email = :email LIMIT 1";
-$stmt = $conn->prepare($query);
-$stmt->bindParam(':email', $email);
-$stmt->execute();
+try {
+    $database = new App\Config\Database();
+    $conn = $database->getConnection();
 
-if ($stmt->rowCount() > 0) {
-    http_response_code(409);
-    echo json_encode(['success' => false, 'error' => 'Email already registered']);
-    exit;
-}
+    // Check if email exists
+    $query = "SELECT id FROM users WHERE email = :email LIMIT 1";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
 
-// Create user
-$passwordHash = password_hash($password, PASSWORD_BCRYPT);
+    if ($stmt->rowCount() > 0) {
+        http_response_code(409);
+        echo json_encode(['success' => false, 'error' => 'Email already registered']);
+        exit;
+    }
 
-$query = "INSERT INTO users (email, password_hash, full_name) VALUES (:email, :password_hash, :full_name)";
-$stmt = $conn->prepare($query);
-$stmt->bindParam(':email', $email);
-$stmt->bindParam(':password_hash', $passwordHash);
-$stmt->bindParam(':full_name', $fullName);
+    // Create user
+    $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
-if ($stmt->execute()) {
-    $userId = $conn->lastInsertId();
+    $query = "INSERT INTO users (email, password_hash, full_name) VALUES (:email, :password_hash, :full_name)";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':password_hash', $passwordHash);
+    $stmt->bindParam(':full_name', $fullName);
 
-    // Generate simple token (base64 of user_id:email) - In production use JWT
-    $token = base64_encode($userId . ':' . $email);
+    if ($stmt->execute()) {
+        $userId = $conn->lastInsertId();
 
-    echo json_encode([
-        'success' => true,
-        'message' => 'Registration successful',
-        'token' => $token,
-        'user' => [
-            'id' => $userId,
-            'email' => $email,
-            'full_name' => $fullName
-        ]
-    ]);
-} else {
+        // Generate simple token (base64 of user_id:email) - In production use JWT
+        $token = base64_encode($userId . ':' . $email);
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'Registration successful',
+            'token' => $token,
+            'user' => [
+                'id' => $userId,
+                'email' => $email,
+                'full_name' => $fullName
+            ]
+        ]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Registration failed: ' . implode(" ", $stmt->errorInfo())]);
+    }
+} catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'Registration failed']);
+    echo json_encode(['success' => false, 'error' => 'Server Error: ' . $e->getMessage()]);
 }

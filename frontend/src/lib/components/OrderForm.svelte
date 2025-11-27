@@ -2,6 +2,7 @@
   import { createOrder } from '$lib/api';
   import { goto } from '$app/navigation';
   import { customerAuth } from '$lib/stores/auth';
+  import { cart } from '$lib/stores/cart';
 
   export let domain = '';
   export let packageType = 'starter';
@@ -42,6 +43,9 @@
       const data = await res.json();
 
       if (data.success) {
+        // Clear cart
+        cart.set(null);
+
         // Open payment in new tab
         window.open(data.payment_url, '_blank');
         

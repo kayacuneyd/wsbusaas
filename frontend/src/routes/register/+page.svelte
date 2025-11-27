@@ -28,7 +28,15 @@
           token: data.token,
           user: data.user
         });
-        goto('/');
+        
+        // Check cart
+        let redirectUrl = '/dashboard';
+        const cartItems = localStorage.getItem('cart');
+        if (cartItems) {
+            redirectUrl = '/checkout';
+        }
+
+        goto(redirectUrl);
       } else {
         error = data.error || 'Kayıt başarısız.';
       }

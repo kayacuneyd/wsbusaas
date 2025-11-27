@@ -28,10 +28,23 @@
           token: data.token,
           user: data.user
         });
+      if (data.token) {
+        login(data.token, data.user);
         
-        // Redirect to previous page or home
-        const redirect = $page.url.searchParams.get('redirect') || '/';
-        goto(redirect);
+        // Check cart
+        let redirectUrl = '/dashboard';
+        const cartItems = localStorage.getItem('cart');
+        if (cartItems) {
+            redirectUrl = '/checkout';
+        }
+
+        // URL param overrides everything
+        const urlRedirect = $page.url.searchParams.get('redirect');
+        if (urlRedirect) {
+            redirectUrl = urlRedirect;
+        }
+
+        goto(redirectUrl);
       } else {
         error = data.error || 'Giriş başarısız.';
       }

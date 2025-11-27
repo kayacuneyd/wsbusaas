@@ -3,9 +3,9 @@
 
   const steps = [
     { status: 'created', label: 'Sipariş Alındı' },
-    { status: 'payment_received', label: 'Ödeme Onaylandı' },
-    { status: 'domain_purchased', label: 'Domain Hazır' },
-    { status: 'hosting_setup', label: 'Kurulum' },
+    { status: 'payment_received', label: 'Domain Alınıyor' },
+    { status: 'domain_purchased', label: 'Hosting Hazırlanıyor' },
+    { status: 'hosting_setup', label: 'Tema Yükleniyor' },
     { status: 'completed', label: 'Tamamlandı' }
   ];
 
@@ -48,11 +48,11 @@
         {#if order.status === 'created'}
           Ödeme onayı bekleniyor.
         {:else if order.status === 'payment_received'}
-          Ödemeniz alındı. Domain işlemleri başlatılıyor.
+          Ödemeniz alındı. Domain tescil işlemleri başlatılıyor.
         {:else if order.status === 'domain_purchased'}
-          Domain satın alındı. Hosting kurulumu yapılıyor.
+          Domain tescil edildi. Hosting hesabınız hazırlanıyor.
         {:else if order.status === 'hosting_setup'}
-          Hosting hazır. Siteniz yükleniyor.
+          Hosting hazır. Seçtiğiniz tema ve eklentiler yükleniyor.
         {/if}
       </p>
     {/if}
