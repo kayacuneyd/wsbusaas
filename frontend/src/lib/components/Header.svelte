@@ -1,10 +1,5 @@
 <script lang="ts">
-  // Header logic here
-  import { writable } from 'svelte/store';
-
-  // Mock customerAuth store for demonstration
-  // In a real application, this would likely come from a shared store or context
-  // The local mock definition has been replaced by an import from '$lib/stores/auth'
+  import { customerAuth } from '$lib/stores/auth';
 </script>
 
 <header class="bg-white shadow-sm sticky top-0 z-50">
