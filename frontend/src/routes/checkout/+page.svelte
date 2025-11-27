@@ -68,7 +68,7 @@
 
     <div class="mt-8 bg-white shadow sm:rounded-lg p-6">
       <h3 class="text-lg font-medium text-gray-900 mb-6">Müşteri Bilgileri</h3>
-      <OrderForm />
+      <OrderForm {domain} {packageType} />
     </div>
   </div>
 </div>
