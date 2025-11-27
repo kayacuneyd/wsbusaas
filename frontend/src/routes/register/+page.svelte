@@ -65,16 +65,16 @@
     <form class="mt-8 space-y-6" on:submit|preventDefault={handleRegister}>
       <div class="rounded-md shadow-sm -space-y-px">
         <div>
-          <label for="full-name" class="sr-only">Ad Soyad</label>
-          <input id="full-name" name="full_name" type="text" required bind:value={fullName} class="appearance-none rounded-none rounded-t-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Ad Soyad">
+          <label for="register-name" class="sr-only">Ad Soyad</label>
+          <input id="register-name" name="full_name" type="text" required bind:value={fullName} class="appearance-none rounded-none rounded-t-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Ad Soyad">
         </div>
         <div>
-          <label for="email-address" class="sr-only">Email Adresi</label>
-          <input id="email-address" name="email" type="email" autocomplete="email" required bind:value={email} class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Email Adresi">
+          <label for="register-email" class="sr-only">Email Adresi</label>
+          <input id="register-email" name="email" type="email" autocomplete="email" required bind:value={email} class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Email Adresi">
         </div>
         <div>
-          <label for="password" class="sr-only">Şifre</label>
-          <input id="password" name="password" type="password" autocomplete="new-password" required bind:value={password} class="appearance-none rounded-none rounded-b-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Şifre">
+          <label for="register-password" class="sr-only">Şifre</label>
+          <input id="register-password" name="password" type="password" autocomplete="new-password" required bind:value={password} class="appearance-none rounded-none rounded-b-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Şifre">
         </div>
       </div>
 

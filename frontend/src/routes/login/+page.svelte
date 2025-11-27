@@ -71,12 +71,12 @@
     <form class="mt-8 space-y-6" on:submit|preventDefault={handleLogin}>
       <div class="rounded-md shadow-sm -space-y-px">
         <div>
-          <label for="email-address" class="sr-only">Email Adresi</label>
-          <input id="email-address" name="email" type="email" autocomplete="email" required bind:value={email} class="appearance-none rounded-none rounded-t-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Email Adresi">
+          <label for="login-email" class="sr-only">Email Adresi</label>
+          <input id="login-email" name="email" type="email" autocomplete="email" required bind:value={email} class="appearance-none rounded-none rounded-t-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Email Adresi">
         </div>
         <div>
-          <label for="password" class="sr-only">Şifre</label>
-          <input id="password" name="password" type="password" autocomplete="current-password" required bind:value={password} class="appearance-none rounded-none rounded-b-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Şifre">
+          <label for="login-password" class="sr-only">Şifre</label>
+          <input id="login-password" name="password" type="password" autocomplete="current-password" required bind:value={password} class="appearance-none rounded-none rounded-b-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Şifre">
         </div>
       </div>
 
