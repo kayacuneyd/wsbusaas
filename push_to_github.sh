@@ -34,8 +34,8 @@ git commit -m "$commit_message"
 
 # Push
 echo -e "${YELLOW}GitHub'a gönderiliyor...${NC}"
-current_branch=$(git branch --show-current)
-git push origin $current_branch
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+git push -u origin $current_branch
 
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}GitHub yüklemesi başarılı!${NC}"
