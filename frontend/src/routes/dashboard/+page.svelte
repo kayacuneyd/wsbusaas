@@ -105,6 +105,7 @@
     <div class="bg-white shadow overflow-hidden sm:rounded-md">
       <ul class="divide-y divide-gray-200">
         {#each orders as order}
+          {@const badge = getStatusBadge(order.order_status)}
           <li>
             <a href={`/order-status/${order.order_id}`} class="block hover:bg-gray-50">
               <div class="px-4 py-4 sm:px-6">
@@ -113,7 +114,6 @@
                     {order.domain_name}
                   </p>
                   <div class="ml-2 flex-shrink-0 flex">
-                    {@const badge = getStatusBadge(order.order_status)}
                     <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {badge.class}">
                       {badge.label}
                     </p>
