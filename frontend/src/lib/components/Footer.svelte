@@ -9,9 +9,9 @@
         <p>&copy; {year} WebsiteBuilder. All rights reserved.</p>
       </div>
       <div class="flex space-x-6">
-        <a href="#" class="hover:text-gray-300">İletişim</a>
-        <a href="#" class="hover:text-gray-300">Impressum</a>
-        <a href="#" class="hover:text-gray-300">Datenschutz</a>
+        <a href="mailto:support@websitebuilder.com" class="hover:text-gray-300">İletişim</a>
+        <a href="/impressum" class="hover:text-gray-300">Impressum</a>
+        <a href="/datenschutz" class="hover:text-gray-300">Datenschutz</a>
       </div>
     </div>
   </div>

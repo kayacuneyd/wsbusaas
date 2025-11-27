@@ -11,13 +11,20 @@ export async function checkDomain(domain: string, tld: string) {
   return response.json();
 }
 
-export async function createOrder(data: any) {
+export async function createOrder(data: any, token?: string) {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json'
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const response = await fetch(`${API_URL}/orders`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
+    headers,
+    body: JSON.stringify(data)
   });
+
   return response.json();
 }

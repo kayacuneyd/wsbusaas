@@ -15,11 +15,11 @@ class Database
 
     public function __construct()
     {
-        // Production Defaults (Hostinger)
-        $this->host = $_ENV['DB_HOST'] ?? 'localhost';
-        $this->db_name = $_ENV['DB_NAME'] ?? 'u553245641_websaas';
-        $this->username = $_ENV['DB_USER'] ?? 'u553245641_websaas';
-        $this->password = $_ENV['DB_PASS'] ?? 'Kayacuneyd1453!';
+        // Rely on environment variables; no hard-coded credentials
+        $this->host = $_ENV['DB_HOST'] ?? '127.0.0.1';
+        $this->db_name = $_ENV['DB_NAME'] ?? '';
+        $this->username = $_ENV['DB_USER'] ?? '';
+        $this->password = $_ENV['DB_PASS'] ?? '';
     }
 
     public function getConnection()

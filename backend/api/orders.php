@@ -46,17 +46,6 @@ $orderService = new OrderService();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
 
-    // DEBUG LOGGING
-    $logFile = __DIR__ . '/../../debug_orders.log';
-    $logData = "-------------------------\n";
-    $logData .= "Time: " . date('Y-m-d H:i:s') . "\n";
-    $logData .= "Headers: " . print_r(getallheaders(), true) . "\n";
-    $logData .= "Raw Input: " . file_get_contents('php://input') . "\n";
-    $logData .= "Decoded Input: " . print_r($input, true) . "\n";
-    $logData .= "User ID from Token: " . ($userId ?? 'NULL') . "\n";
-    file_put_contents($logFile, $logData, FILE_APPEND);
-    // END DEBUG LOGGING
-
     $input['user_id'] = $userId; // Add user_id to input for service
 
     // Basic validation
@@ -77,8 +66,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $baseUrl = $stmtSettings->fetchColumn();
 
         if (!$baseUrl) {
-            // Fallback if not set
-            $baseUrl = "https://ruul.space/payment/cs_live_a1pcdSzZ9W0GJwTGV7ybtlRtwiyDxl7mIFaVsCGJ6NZH8Q642veiC4XEyA_secret_fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSdwbEhqYWAnPydmcHZxamgneCUl?from=%2Fcuneytkaya%2Fproducts%2F13347";
+            // Fallback to environment variable rather than hard-coded secret
+            $baseUrl = $_ENV['PAYMENT_BASE_URL'] ?? null;
+        }
+
+        if (!$baseUrl) {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'error' => 'Payment URL is not configured']);
+            exit;
         }
 
         // Check if URL already has query params to decide between ? or & (though Ruul usually has params)

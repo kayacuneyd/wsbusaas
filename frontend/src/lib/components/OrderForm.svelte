@@ -24,33 +24,17 @@
         customer_email: customerEmail
       };
 
-      // Pass token to createOrder (we need to update api.ts or handle it here)
-      // Let's handle fetch here directly or update api.ts. 
-      // Updating api.ts is cleaner but for speed let's do it here or assume api.ts can take headers.
-      // Actually, let's update createOrder in api.ts to accept token.
-      
-      // Temporary: Direct fetch to support auth header
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-      const res = await fetch(`${API_URL}/orders`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${$customerAuth.token}`
-        },
-        body: JSON.stringify(orderData)
-      });
-      
-      const data = await res.json();
+      const data = await createOrder(orderData, $customerAuth.token);
 
-      if (data.success) {
+      if (data.success && data.payment?.url && data.order?.order_id) {
         // Clear cart
         cart.set(null);
 
         // Open payment in new tab
-        window.open(data.payment_url, '_blank');
+        window.open(data.payment.url, '_blank');
         
         // Redirect to order status page in current tab
-        goto(`/order-status/${data.order_id}`);
+        goto(`/order-status/${data.order.order_id}`);
       } else {
         error = data.error || 'Sipariş oluşturulamadı.';
       }
