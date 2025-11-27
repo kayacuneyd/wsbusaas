@@ -68,8 +68,17 @@
         Hoşgeldin, {$customerAuth.user?.full_name}
       </p>
     </div>
-    <div class="mt-4 flex md:mt-0 md:ml-4">
-      <a href="/" class="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+    <div class="mt-4 flex md:mt-0 md:ml-4 space-x-3">
+      <button 
+        on:click={() => {
+          customerAuth.set({ isAuthenticated: false, token: null, user: null });
+          window.location.href = '/';
+        }}
+        class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        Çıkış Yap
+      </button>
+      <a href="/" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
         Yeni Sipariş Oluştur
       </a>
     </div>

@@ -45,12 +45,25 @@ $orderService = new OrderService();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
+
+    // DEBUG LOGGING
+    $logFile = __DIR__ . '/../../debug_orders.log';
+    $logData = "-------------------------\n";
+    $logData .= "Time: " . date('Y-m-d H:i:s') . "\n";
+    $logData .= "Headers: " . print_r(getallheaders(), true) . "\n";
+    $logData .= "Raw Input: " . file_get_contents('php://input') . "\n";
+    $logData .= "Decoded Input: " . print_r($input, true) . "\n";
+    $logData .= "User ID from Token: " . ($userId ?? 'NULL') . "\n";
+    file_put_contents($logFile, $logData, FILE_APPEND);
+    // END DEBUG LOGGING
+
     $input['user_id'] = $userId; // Add user_id to input for service
 
     // Basic validation
     if (empty($input['customer_email']) || empty($input['domain_name'])) {
+        file_put_contents($logFile, "Error: Missing required fields\n", FILE_APPEND);
         http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'Missing required fields']);
+        echo json_encode(['success' => false, 'error' => 'Missing required fields', 'debug_input' => $input]);
         exit;
     }
 
