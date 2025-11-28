@@ -78,11 +78,8 @@
     return date.toLocaleString('tr-TR');
   }
 
-  function getStatusBadge(status: string) {
-    return {
-      class: getOrderStatusBadgeClasses(status),
-      label: getOrderStatusLabel(status)
-    };
+  function resolveStatus(order: any) {
+    return order?.order_status ?? order?.status;
   }
 
   onMount(loadOrder);
@@ -106,9 +103,8 @@
         <p class="mt-1 max-w-2xl text-sm text-gray-500">{order.order_id}</p>
       </div>
       <div>
-        {@const badge = getStatusBadge(order.order_status ?? order.status)}
-        <span class={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${badge.class}`}>
-          {badge.label}
+        <span class={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getOrderStatusBadgeClasses(resolveStatus(order))}`}>
+          {getOrderStatusLabel(resolveStatus(order))}
         </span>
       </div>
     </div>
@@ -174,8 +170,7 @@
           {#each sortedHistory as history}
             <li class="px-4 py-4 sm:px-6 text-sm">
               <div class="flex items-center justify-between">
-                {@const badge = getStatusBadge(history.status)}
-                <p class="font-semibold text-gray-900">{badge.label}</p>
+                <p class="font-semibold text-gray-900">{getOrderStatusLabel(history.status)}</p>
                 <p class="text-xs text-gray-500">{formatDate(history.created_at)}</p>
               </div>
               <p class="text-xs text-gray-500">Güncelleyen: {history.changed_by ?? 'sistem'}</p>

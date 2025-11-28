@@ -33,6 +33,11 @@
     const bDate = b?.created_at ? new Date(b.created_at).getTime() : 0;
     return bDate - aDate;
   });
+  $: timelineSteps = ORDER_STATES.map((step, index) => ({
+    step,
+    index,
+    entry: historyByStatus[step.key]
+  }));
 
   function formatDate(value?: string | null) {
     if (!value) return '—';
@@ -117,8 +122,7 @@
   <div>
     <h3 class="mb-4 text-lg font-semibold text-gray-900">Adım Adım İlerleme</h3>
     <div class="space-y-6">
-      {#each ORDER_STATES as step, index}
-        {@const timelineEntry = historyByStatus[step.key]}
+      {#each timelineSteps as { step, index, entry } }
         <div class="flex gap-4">
           <div class="flex flex-col items-center">
             <div
@@ -137,12 +141,12 @@
           <div class="flex-1">
             <p class="font-semibold text-gray-900">{step.label}</p>
             <p class="text-sm text-gray-600">{step.messages.tr}</p>
-            {#if timelineEntry}
+            {#if entry}
               <p class="mt-1 text-xs text-gray-500">
-                {formatDate(timelineEntry.created_at)} · {timelineEntry.changed_by ?? 'sistem'}
+                {formatDate(entry.created_at)} · {entry.changed_by ?? 'sistem'}
               </p>
-              {#if timelineEntry.note}
-                <p class="mt-1 text-sm text-gray-700">{timelineEntry.note}</p>
+              {#if entry.note}
+                <p class="mt-1 text-sm text-gray-700">{entry.note}</p>
               {/if}
             {:else}
               <p class="mt-1 text-xs text-gray-400">Bu adım için güncelleme bekleniyor.</p>

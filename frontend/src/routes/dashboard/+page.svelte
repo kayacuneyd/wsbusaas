@@ -45,18 +45,15 @@
   $: latestOrderState = latestOrder ? getOrderState(latestOrder.order_status ?? latestOrder.status) : null;
   $: latestOrderProgress = latestOrder ? getOrderProgressPercent(latestOrder.order_status ?? latestOrder.status) : 0;
 
-  function getStatusBadge(status: string) {
-    return {
-      class: getOrderStatusBadgeClasses(status),
-      label: getOrderStatusLabel(status)
-    };
-  }
-
   function formatDate(value?: string) {
     if (!value) return '—';
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return value;
     return date.toLocaleDateString('tr-TR');
+  }
+
+  function resolveStatus(order: any) {
+    return order?.order_status ?? order?.status;
   }
 </script>
 
@@ -156,7 +153,6 @@
     <div class="bg-white shadow overflow-hidden sm:rounded-md">
       <ul class="divide-y divide-gray-200">
         {#each orders as order}
-          {@const badge = getStatusBadge(order.order_status)}
           <li>
             <a href={`/order-status/${order.order_id}`} class="block hover:bg-gray-50">
               <div class="px-4 py-4 sm:px-6">
@@ -165,8 +161,8 @@
                     {order.domain_name}
                   </p>
                   <div class="ml-2 flex-shrink-0 flex">
-                    <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {badge.class}">
-                      {badge.label}
+                    <p class={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getOrderStatusBadgeClasses(resolveStatus(order))}`}>
+                      {getOrderStatusLabel(resolveStatus(order))}
                     </p>
                   </div>
                 </div>
