@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { API_URL } from '$lib/api';
   import { adminAuth } from '$lib/stores/auth';
+  import { getOrderStatusBadgeClasses, getOrderStatusLabel } from '$lib/constants/orderStatus';
 
   let orders: any[] = [];
   let loading = true;
@@ -23,6 +24,13 @@
       loading = false;
     }
   });
+
+  function getStatusBadge(status: string) {
+    return {
+      class: getOrderStatusBadgeClasses(status),
+      label: getOrderStatusLabel(status)
+    };
+  }
 </script>
 
 <svelte:head>
@@ -42,6 +50,7 @@
     {:else}
       {#each orders as order}
         <li>
+          {@const badge = getStatusBadge(order.order_status ?? order.status)}
           <a href="/admin/orders/{order.order_id}" class="block hover:bg-gray-50">
             <div class="px-4 py-4 sm:px-6">
               <div class="flex items-center justify-between">
@@ -49,11 +58,8 @@
                   {order.domain_name}
                 </p>
                 <div class="ml-2 flex-shrink-0 flex">
-                  <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                    {order.status === 'completed' ? 'bg-green-100 text-green-800' : 
-                     order.status === 'created' ? 'bg-gray-100 text-gray-800' : 
-                     'bg-yellow-100 text-yellow-800'}">
-                    {order.status}
+                  <p class={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${badge.class}`}>
+                    {badge.label}
                   </p>
                 </div>
               </div>

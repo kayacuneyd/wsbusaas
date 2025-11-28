@@ -2,8 +2,10 @@
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../config/Database.php';
 require_once __DIR__ . '/../../services/JwtService.php';
+require_once __DIR__ . '/../../services/OrderService.php';
 
 use App\Services\JwtService;
+use App\Services\OrderService;
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -34,8 +36,8 @@ if (!$decoded || ($decoded['role'] ?? '') !== 'admin') {
     exit;
 }
 
-$database = new App\Config\Database();
-$conn = $database->getConnection();
+$orderService = new OrderService();
+$conn = $orderService->conn;
 
 // Parse ID from URL if present (e.g. /api/admin/orders/WB123)
 // Assuming .htaccess passes route param
@@ -50,11 +52,7 @@ if (count($parts) > 2) {
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if ($orderId) {
         // Get single order
-        $query = "SELECT * FROM orders WHERE order_id = :order_id LIMIT 1";
-        $stmt = $conn->prepare($query);
-        $stmt->bindParam(':order_id', $orderId);
-        $stmt->execute();
-        $order = $stmt->fetch(PDO::FETCH_ASSOC);
+        $order = $orderService->getOrderWithStatus($orderId);
 
         if ($order) {
             // Get logs
@@ -87,6 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $input = json_decode(file_get_contents('php://input'), true);
     $status = $input['status'] ?? '';
+    $note = $input['note'] ?? null;
 
     if (empty($status)) {
         http_response_code(400);
@@ -94,29 +93,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         exit;
     }
 
-    try {
-        $query = "UPDATE orders SET order_status = :status, updated_at = NOW() WHERE order_id = :order_id";
-        $stmt = $conn->prepare($query);
-        $stmt->bindParam(':status', $status);
-        $stmt->bindParam(':order_id', $orderId);
-        $stmt->execute();
+    if (!OrderService::isValidStatus($status)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => 'Invalid status value']);
+        exit;
+    }
 
-        // Log
-        $queryLog = "INSERT INTO order_logs (order_id, log_type, message) VALUES (:order_id, 'info', :message)";
-        $stmtLog = $conn->prepare($queryLog);
-        $stmtLog->bindParam(':order_id', $orderId);
-        $msg = "Durum güncellendi: " . $status;
-        $stmtLog->bindParam(':message', $msg);
-        $stmtLog->execute();
+    try {
+        $adminIdentifier = $decoded['email'] ?? ('admin#' . ($decoded['sub'] ?? 'system'));
+        $updatedOrder = $orderService->updateOrderStatus($orderId, $status, $note, $adminIdentifier);
+
+        if (!$updatedOrder) {
+            throw new Exception('Status could not be updated');
+        }
 
         // Fetch updated order
-        $query = "SELECT * FROM orders WHERE order_id = :order_id LIMIT 1";
-        $stmt = $conn->prepare($query);
-        $stmt->bindParam(':order_id', $orderId);
-        $stmt->execute();
-        $order = $stmt->fetch(PDO::FETCH_ASSOC);
+        $order = $orderService->getOrderWithStatus($orderId);
 
-        echo json_encode(['success' => true, 'order' => $order]);
+        // Reload logs
+        $queryLogs = "SELECT * FROM order_logs WHERE order_id = :order_id ORDER BY created_at DESC";
+        $stmtLogs = $conn->prepare($queryLogs);
+        $stmtLogs->bindParam(':order_id', $orderId);
+        $stmtLogs->execute();
+        $logs = $stmtLogs->fetchAll(PDO::FETCH_ASSOC);
+
+        echo json_encode(['success' => true, 'order' => $order, 'logs' => $logs]);
     } catch (Exception $e) {
         http_response_code(500);
         echo json_encode(['success' => false, 'error' => $e->getMessage()]);

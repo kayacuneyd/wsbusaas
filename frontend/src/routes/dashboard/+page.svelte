@@ -3,10 +3,17 @@
   import { customerAuth } from '$lib/stores/auth';
   import { goto } from '$app/navigation';
   import { API_URL } from '$lib/api';
+  import {
+    getOrderProgressPercent,
+    getOrderState,
+    getOrderStatusBadgeClasses,
+    getOrderStatusLabel
+  } from '$lib/constants/orderStatus';
 
   let orders: any[] = [];
   let loading = true;
   let error = '';
+  let latestOrder: any = null;
 
   onMount(async () => {
     if (!$customerAuth.isAuthenticated) {
@@ -24,6 +31,7 @@
       
       if (data.success) {
         orders = data.orders;
+        latestOrder = orders[0] ?? null;
       } else {
         error = data.error || 'Siparişler yüklenemedi.';
       }
@@ -34,23 +42,21 @@
     }
   });
 
+  $: latestOrderState = latestOrder ? getOrderState(latestOrder.order_status ?? latestOrder.status) : null;
+  $: latestOrderProgress = latestOrder ? getOrderProgressPercent(latestOrder.order_status ?? latestOrder.status) : 0;
+
   function getStatusBadge(status: string) {
-    const styles: any = {
-      'created': 'bg-yellow-100 text-yellow-800',
-      'paid': 'bg-blue-100 text-blue-800',
-      'completed': 'bg-green-100 text-green-800',
-      'cancelled': 'bg-red-100 text-red-800'
-    };
-    const labels: any = {
-      'created': 'Oluşturuldu',
-      'paid': 'Ödeme Yapıldı',
-      'completed': 'Tamamlandı',
-      'cancelled': 'İptal Edildi'
-    };
     return {
-      class: styles[status] || 'bg-gray-100 text-gray-800',
-      label: labels[status] || status
+      class: getOrderStatusBadgeClasses(status),
+      label: getOrderStatusLabel(status)
     };
+  }
+
+  function formatDate(value?: string) {
+    if (!value) return '—';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleDateString('tr-TR');
   }
 </script>
 
@@ -111,6 +117,42 @@
       </div>
     </div>
   {:else}
+    {#if latestOrder && latestOrderState}
+      <div class="mb-10 rounded-xl bg-white p-6 shadow">
+        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p class="text-sm uppercase tracking-wide text-gray-500">Son İşlem</p>
+            <h3 class="text-2xl font-bold text-gray-900">{latestOrderState.label}</h3>
+            <p class="text-gray-700">{latestOrderState.messages.tr}</p>
+            <p class="text-xs italic text-gray-500">{latestOrderState.messages.en}</p>
+            <p class="mt-2 text-sm text-gray-500">
+              {latestOrder.status_message ?? latestOrderState.messages.tr}
+            </p>
+          </div>
+          <div class="text-sm text-gray-500">
+            <p>Güncelleme: {formatDate(latestOrder.status_updated_at ?? latestOrder.updated_at)}</p>
+            <a
+              class="mt-2 inline-flex items-center justify-center rounded-md border border-blue-200 px-4 py-2 font-semibold text-blue-700 transition hover:bg-blue-600 hover:text-white"
+              href={`/order-status/${latestOrder.order_id}`}
+            >
+              Detayları Gör
+            </a>
+          </div>
+        </div>
+        <div class="mt-6">
+          <div class="h-2 w-full overflow-hidden rounded-full bg-gray-100">
+            <div
+              class="h-full rounded-full bg-blue-600 transition-all duration-500"
+              style={`width: ${latestOrderProgress}%`}
+            ></div>
+          </div>
+          <p class="mt-2 text-xs text-gray-500">
+            Ruul.io işleminiz tamamlandıktan sonra durum manuel olarak onaylanır.
+          </p>
+        </div>
+      </div>
+    {/if}
+
     <div class="bg-white shadow overflow-hidden sm:rounded-md">
       <ul class="divide-y divide-gray-200">
         {#each orders as order}

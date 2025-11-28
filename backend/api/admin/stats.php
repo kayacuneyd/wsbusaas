@@ -38,7 +38,7 @@ $database = new App\Config\Database();
 $conn = $database->getConnection();
 
 // Get Pending Orders
-$queryPending = "SELECT COUNT(*) as count FROM orders WHERE order_status != 'completed' AND order_status != 'failed'";
+$queryPending = "SELECT COUNT(*) as count FROM orders WHERE order_status IN ('pending_confirmation','payment_received','processing')";
 $stmtPending = $conn->prepare($queryPending);
 $stmtPending->execute();
 $pending = $stmtPending->fetch(PDO::FETCH_ASSOC)['count'];

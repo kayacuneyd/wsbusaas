@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../config/Database.php';
+require_once __DIR__ . '/../../services/OrderService.php';
+
+use App\Services\OrderService;
 
 header('Content-Type: application/json');
 
@@ -29,8 +32,8 @@ if ($paymentStatus !== 'paid') {
     exit;
 }
 
-$database = new App\Config\Database();
-$conn = $database->getConnection();
+$orderService = new OrderService();
+$conn = $orderService->conn;
 
 try {
     // If no Order ID, try to find by email
@@ -65,11 +68,14 @@ try {
         exit;
     }
 
-    // Update order status
-    $query = "UPDATE orders SET payment_status = 'paid', order_status = 'payment_received', updated_at = NOW() WHERE order_id = :order_id";
+    // Update payment flag
+    $query = "UPDATE orders SET payment_status = 'paid', updated_at = NOW() WHERE order_id = :order_id";
     $stmt = $conn->prepare($query);
     $stmt->bindParam(':order_id', $orderId);
     $stmt->execute();
+
+    // Update progress status + history
+    $orderService->updateOrderStatus($orderId, 'payment_received', 'Ruul.io webhook bildirimi ile ödeme doğrulandı.', 'ruul-webhook');
 
     // Log
     $queryLog = "INSERT INTO order_logs (order_id, log_type, message) VALUES (:order_id, 'success', 'Ödeme alındı (Webhook)')";

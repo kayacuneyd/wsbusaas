@@ -3,22 +3,26 @@
   import { onMount } from 'svelte';
   import { API_URL } from '$lib/api';
   import { adminAuth } from '$lib/stores/auth';
+  import {
+    ORDER_STATES,
+    getOrderStatusBadgeClasses,
+    getOrderStatusLabel
+  } from '$lib/constants/orderStatus';
 
   let orderId = $page.params.orderId;
   let order: any = null;
   let logs: any[] = [];
   let loading = true;
   let updating = false;
+  let selectedStatus = ORDER_STATES[0].key;
+  let note = '';
 
-  const statuses = [
-    'created',
-    'payment_received',
-    'domain_purchased',
-    'hosting_setup',
-    'template_deployed',
-    'completed',
-    'failed'
-  ];
+  $: statusHistory = Array.isArray(order?.status_history) ? order.status_history : [];
+  $: sortedHistory = [...statusHistory].sort((a, b) => {
+    const aDate = a?.created_at ? new Date(a.created_at).getTime() : 0;
+    const bDate = b?.created_at ? new Date(b.created_at).getTime() : 0;
+    return bDate - aDate;
+  });
 
   async function loadOrder() {
     try {
@@ -29,6 +33,7 @@
       if (data.success) {
         order = data.order;
         logs = data.logs || [];
+        selectedStatus = order?.order_status ?? ORDER_STATES[0].key;
       }
     } catch (e) {
       console.error(e);
@@ -37,9 +42,10 @@
     }
   }
 
-  async function updateStatus(newStatus: string) {
-    if (!confirm(`Durumu "${newStatus}" olarak değiştirmek istediğinize emin misiniz?`)) return;
-    
+  async function submitStatusUpdate() {
+    if (!selectedStatus) return;
+    if (!confirm(`Durumu \"${getOrderStatusLabel(selectedStatus)}\" olarak değiştirmek istediğinize emin misiniz?`)) return;
+
     updating = true;
     try {
       const res = await fetch(`${API_URL}/admin/orders/${orderId}`, {
@@ -48,19 +54,35 @@
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${$adminAuth.token}`
         },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ status: selectedStatus, note: note || null })
       });
       const data = await res.json();
       if (data.success) {
         order = data.order;
-        // Reload logs
-        loadOrder();
+        logs = data.logs || [];
+        note = '';
+      } else {
+        alert(data.error || 'Durum güncellenemedi.');
       }
     } catch (e) {
       alert('Güncelleme başarısız.');
     } finally {
       updating = false;
     }
+  }
+
+  function formatDate(value?: string) {
+    if (!value) return '—';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleString('tr-TR');
+  }
+
+  function getStatusBadge(status: string) {
+    return {
+      class: getOrderStatusBadgeClasses(status),
+      label: getOrderStatusLabel(status)
+    };
   }
 
   onMount(loadOrder);
@@ -84,11 +106,9 @@
         <p class="mt-1 max-w-2xl text-sm text-gray-500">{order.order_id}</p>
       </div>
       <div>
-        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-          {order.status === 'completed' ? 'bg-green-100 text-green-800' : 
-           order.status === 'created' ? 'bg-gray-100 text-gray-800' : 
-           'bg-yellow-100 text-yellow-800'}">
-          {order.status}
+        {@const badge = getStatusBadge(order.order_status ?? order.status)}
+        <span class={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${badge.class}`}>
+          {badge.label}
         </span>
       </div>
     </div>
@@ -111,22 +131,63 @@
         </div>
         <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500">Durum Güncelle</dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <div class="flex gap-2">
-              <select 
-                value={order.status} 
-                on:change={(e) => updateStatus(e.currentTarget.value)}
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 space-y-3">
+            <select
+              bind:value={selectedStatus}
+              disabled={updating}
+              class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            >
+              {#each ORDER_STATES as status}
+                <option value={status.key}>{status.label}</option>
+              {/each}
+            </select>
+            <textarea
+              bind:value={note}
+              rows="3"
+              placeholder="Opsiyonel not. Müşteri panelinde durum mesajı olarak gösterilir."
+              class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            ></textarea>
+            <div class="flex items-center justify-between">
+              <p class="text-xs text-gray-500">Not, müşteriye profesyonel ve açıklayıcı bir mesaj olarak gösterilir.</p>
+              <button
+                class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+                on:click={submitStatusUpdate}
                 disabled={updating}
-                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border"
               >
-                {#each statuses as status}
-                  <option value={status}>{status}</option>
-                {/each}
-              </select>
+                {updating ? 'Güncelleniyor...' : 'Durumu Güncelle'}
+              </button>
             </div>
           </dd>
         </div>
       </dl>
+    </div>
+  </div>
+
+  <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+    <div class="px-4 py-5 sm:px-6">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">Durum Geçmişi</h3>
+      <p class="mt-1 text-sm text-gray-500">Ruul.io e-postaları doğrulandıktan sonra manuel olarak güncelleyin.</p>
+    </div>
+    <div class="border-t border-gray-200">
+      {#if sortedHistory.length > 0}
+        <ul class="divide-y divide-gray-200">
+          {#each sortedHistory as history}
+            <li class="px-4 py-4 sm:px-6 text-sm">
+              <div class="flex items-center justify-between">
+                {@const badge = getStatusBadge(history.status)}
+                <p class="font-semibold text-gray-900">{badge.label}</p>
+                <p class="text-xs text-gray-500">{formatDate(history.created_at)}</p>
+              </div>
+              <p class="text-xs text-gray-500">Güncelleyen: {history.changed_by ?? 'sistem'}</p>
+              {#if history.note}
+                <p class="mt-2 text-gray-700">{history.note}</p>
+              {/if}
+            </li>
+          {/each}
+        </ul>
+      {:else}
+        <p class="px-4 py-4 text-sm text-gray-500">Henüz kayıt yok.</p>
+      {/if}
     </div>
   </div>
 

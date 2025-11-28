@@ -67,6 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $orderId = $orderService->createOrder($input);
 
     if ($orderId) {
+        $initialStatus = OrderService::STATUS_MESSAGES['pending_confirmation'];
+
         // Fetch Payment URL from Settings
         $querySettings = "SELECT value FROM settings WHERE `key` = 'payment_url' LIMIT 1";
         $stmtSettings = $orderService->conn->prepare($querySettings);
@@ -91,7 +93,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'success' => true,
             'order' => [
                 'order_id' => $orderId,
-                'status' => 'created'
+                'status' => 'pending_confirmation',
+                'status_message' => $initialStatus['en'],
+                'status_messages' => $initialStatus
             ],
             'payment' => [
                 'url' => $paymentUrl
@@ -129,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $order = $orderService->getOrder($orderId);
+    $order = $orderService->getOrderWithStatus($orderId);
 
     if ($order) {
         echo json_encode(['success' => true, 'order' => $order]);
