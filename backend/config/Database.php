@@ -35,7 +35,11 @@ class Database
             $this->conn->exec("set names utf8");
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $exception) {
-            echo "Connection error: " . $exception->getMessage();
+            // Log but avoid echoing sensitive info in production
+            if (class_exists('\\App\\Services\\Logger')) {
+                \App\Services\Logger::error('DB connection error', ['message' => $exception->getMessage()]);
+            }
+            return null;
         }
 
         return $this->conn;
