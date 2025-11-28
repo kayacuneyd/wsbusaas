@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-  <title>WebsiteBuilder - Profesyonel Web Siteniz Hazır</title>
+  <title>Bezmidar Sitebuilder - Profesyonel Web Siteniz Hazır</title>
   <meta name="description" content="Domain, hosting ve özel tasarım tek pakette. Teknik bilgi gerektirmez." />
 </svelte:head>
 

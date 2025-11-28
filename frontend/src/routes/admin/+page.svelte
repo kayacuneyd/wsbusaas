@@ -30,7 +30,7 @@
 </script>
 
 <svelte:head>
-  <title>Admin Dashboard</title>
+  <title>Admin Dashboard - Bezmidar Sitebuilder</title>
 </svelte:head>
 
 <h1 class="text-2xl font-bold text-gray-900 mb-8">Dashboard</h1>

@@ -27,7 +27,7 @@
 </script>
 
 <svelte:head>
-  <title>Sipariş Takip - WebsiteBuilder</title>
+  <title>Sipariş Takip - Bezmidar Sitebuilder</title>
 </svelte:head>
 
 <div class="py-12 bg-gray-50 min-h-screen">
@@ -47,6 +47,23 @@
         <p class="text-gray-600 mt-2">Sipariş No: {order.order_id}</p>
         <p class="text-gray-600">Domain: {order.domain_name}</p>
       </div>
+
+      <!-- Payment Warning Animation -->
+      {#if (order.order_status ?? order.status) === 'pending_confirmation'}
+        <div class="mb-6 animate-pulse">
+          <div class="rounded-lg border-2 border-amber-400 bg-gradient-to-r from-amber-50 to-yellow-50 p-6 shadow-lg">
+            <div class="flex items-center justify-center gap-3">
+              <svg class="w-8 h-8 text-amber-600 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+              <div class="text-center">
+                <p class="text-xl font-bold text-amber-800 animate-pulse">Ödeme İşleminizi Tamamlayınız</p>
+                <p class="text-sm text-amber-700 mt-1">Ödeme onaylandıktan sonra siparişiniz işleme alınacaktır.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      {/if}
       
       <OrderStatus {order} />
     {/if}

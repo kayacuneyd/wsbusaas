@@ -69,25 +69,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($orderId) {
         $initialStatus = OrderService::STATUS_MESSAGES['pending_confirmation'];
 
-        // Fetch Payment URL from Settings
-        $querySettings = "SELECT value FROM settings WHERE `key` = 'payment_url' LIMIT 1";
-        $stmtSettings = $orderService->conn->prepare($querySettings);
-        $stmtSettings->execute();
-        $baseUrl = $stmtSettings->fetchColumn();
+        // Try to fetch payment URL from packages table first
+        $packageType = $input['package_type'] ?? 'starter';
+        $baseUrl = null;
+
+        // Check if packages table exists and try to get payment link from package
+        try {
+            $conn->exec("CREATE TABLE IF NOT EXISTS packages (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                slug VARCHAR(100) UNIQUE NOT NULL,
+                description TEXT,
+                price DECIMAL(10,2),
+                payment_link TEXT,
+                is_active BOOLEAN DEFAULT TRUE,
+                display_order INT DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            )");
+
+            $queryPackage = "SELECT payment_link FROM packages WHERE slug = :slug AND is_active = 1 LIMIT 1";
+            $stmtPackage = $conn->prepare($queryPackage);
+            $stmtPackage->bindParam(':slug', $packageType);
+            $stmtPackage->execute();
+            $packagePaymentLink = $stmtPackage->fetchColumn();
+            
+            if ($packagePaymentLink) {
+                $baseUrl = $packagePaymentLink;
+            }
+        } catch (Exception $e) {
+            // Packages table might not exist yet, fall back to settings
+        }
+
+        // Fallback to settings if no package payment link found
+        if (!$baseUrl) {
+            $querySettings = "SELECT value FROM settings WHERE `key` = 'payment_url' LIMIT 1";
+            $stmtSettings = $conn->prepare($querySettings);
+            $stmtSettings->execute();
+            $baseUrl = $stmtSettings->fetchColumn();
+        }
 
         if (!$baseUrl) {
             http_response_code(500);
-            echo json_encode(['success' => false, 'error' => 'Payment URL is not configured. Please set it in Admin > Settings.']);
+            echo json_encode(['success' => false, 'error' => 'Payment URL is not configured. Please set it in Admin > Packages or Settings.']);
             exit;
         }
 
-        // Check if URL already has query params to decide between ? or & (though Ruul usually has params)
-        // Our stored URL might already have ?from=...
-        $separator = (strpos($baseUrl, '?') !== false) ? '%3F' : '%3F'; // Using encoded ? as requested for Ruul
-        // Actually, looking at previous request, user wanted %3Forder_id%3D
-        // Let's stick to the requested format: append encoded ?order_id=...
-
-        $paymentUrl = $baseUrl . "%3Forder_id%3D" . $orderId;
+        // Append order_id to payment URL
+        $paymentUrl = $baseUrl . (strpos($baseUrl, '?') !== false ? '&' : '%3F') . 'order_id%3D' . $orderId;
 
         echo json_encode([
             'success' => true,

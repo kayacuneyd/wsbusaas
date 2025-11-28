@@ -53,7 +53,7 @@
 </script>
 
 <svelte:head>
-  <title>Ayarlar - Admin</title>
+  <title>Ayarlar - Admin - Bezmidar Sitebuilder</title>
 </svelte:head>
 
 <h1 class="text-2xl font-bold text-gray-900 mb-8">Ayarlar</h1>

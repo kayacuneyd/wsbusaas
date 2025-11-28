@@ -74,16 +74,40 @@ try {
     $stmt->bindParam(':order_id', $orderId);
     $stmt->execute();
 
+    // Get order details for domain info
+    $queryOrder = "SELECT domain_name FROM orders WHERE order_id = :order_id";
+    $stmtOrder = $conn->prepare($queryOrder);
+    $stmtOrder->bindParam(':order_id', $orderId);
+    $stmtOrder->execute();
+    $orderData = $stmtOrder->fetch(PDO::FETCH_ASSOC);
+    $domainName = $orderData['domain_name'] ?? $input['domain_name'] ?? null;
+
     // Update progress status + history
     $orderService->updateOrderStatus($orderId, 'payment_received', 'Ruul.io webhook bildirimi ile ödeme doğrulandı.', 'ruul-webhook');
 
-    // Log
-    $queryLog = "INSERT INTO order_logs (order_id, log_type, message) VALUES (:order_id, 'success', 'Ödeme alındı (Webhook)')";
+    // Log payment received
+    $queryLog = "INSERT INTO order_logs (order_id, log_type, message, details) VALUES (:order_id, 'success', 'Ödeme alındı (Webhook)', :details)";
     $stmtLog = $conn->prepare($queryLog);
+    $logDetails = json_encode(['domain' => $domainName, 'source' => 'google_apps_script']);
     $stmtLog->bindParam(':order_id', $orderId);
+    $stmtLog->bindParam(':details', $logDetails);
     $stmtLog->execute();
 
-    echo json_encode(['success' => true]);
+    // Prepare for website deployment (log for now, can be extended with Hostinger API)
+    if ($domainName) {
+        $deploymentLog = "INSERT INTO order_logs (order_id, log_type, message, details) VALUES (:order_id, 'info', 'Website yükleme süreci başlatıldı', :details)";
+        $stmtDeploy = $conn->prepare($deploymentLog);
+        $deployDetails = json_encode([
+            'domain' => $domainName,
+            'status' => 'pending_deployment',
+            'note' => 'Manuel website yükleme adımları için hazır. Admin dashboard\'dan takip edilebilir.'
+        ]);
+        $stmtDeploy->bindParam(':order_id', $orderId);
+        $stmtDeploy->bindParam(':details', $deployDetails);
+        $stmtDeploy->execute();
+    }
+
+    echo json_encode(['success' => true, 'domain' => $domainName]);
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(['success' => false, 'error' => $e->getMessage()]);

@@ -5,9 +5,9 @@ const WEBHOOK_URL = 'https://api.yourdomain.com/api/webhook/payment'; // REPLACE
 const WEBHOOK_SECRET = 'your-secret-key'; // REPLACE THIS
 
 function checkEmails() {
-  // Search for emails from ruul.io with subject "Payment Received" (adjust as needed)
-  // This is an example search query
-  const query = 'from:noreply@ruul.io subject:"Payment Received" is:unread';
+  // Search for emails from ruul.io (forwarded from kayacuneyd@gmail.com to admin email)
+  // This will check the admin's email inbox for Ruul payment confirmation emails
+  const query = '(from:ruul.io OR from:noreply@ruul.io) AND (subject:"Payment" OR subject:"Ödeme" OR subject:"payment") is:unread';
   const threads = GmailApp.search(query);
 
   for (const thread of threads) {
@@ -17,11 +17,13 @@ function checkEmails() {
         const body = message.getPlainBody();
         const orderId = extractOrderId(body);
         const customerEmail = extractEmail(body); // Fallback
+        const domainName = extractDomain(body); // Extract domain if available
 
         if (orderId || customerEmail) {
-          const success = sendWebhook(orderId, customerEmail);
+          const success = sendWebhook(orderId, customerEmail, domainName);
           if (success) {
             message.markRead();
+            Logger.log('Payment email processed: Order ' + orderId);
           }
         }
       }
@@ -44,10 +46,28 @@ function extractEmail(body) {
   return match ? match[1] : null;
 }
 
-function sendWebhook(orderId, email) {
+function extractDomain(body) {
+  // Try to extract domain name from email body
+  // Look for common patterns like "domain: example.de" or "example.de"
+  const domainPatterns = [
+    /domain[:\s]+([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i,
+    /([a-zA-Z0-9.-]+\.(de|com|net|org|io))/i
+  ];
+  
+  for (const pattern of domainPatterns) {
+    const match = body.match(pattern);
+    if (match && match[1]) {
+      return match[1];
+    }
+  }
+  return null;
+}
+
+function sendWebhook(orderId, email, domainName) {
   const payload = {
     order_id: orderId,
     email: email,
+    domain_name: domainName,
     payment_status: 'paid'
   };
 

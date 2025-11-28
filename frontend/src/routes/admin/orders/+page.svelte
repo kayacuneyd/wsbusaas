@@ -31,7 +31,7 @@
 </script>
 
 <svelte:head>
-  <title>Siparişler - Admin</title>
+  <title>Siparişler - Admin - Bezmidar Sitebuilder</title>
 </svelte:head>
 
 <div class="flex justify-between items-center mb-6">

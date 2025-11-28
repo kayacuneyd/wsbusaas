@@ -71,6 +71,35 @@
     }
   }
 
+  async function markPaymentReceived() {
+    if (!confirm('Ödeme alındı olarak işaretlemek istediğinize emin misiniz? Bu işlem sipariş durumunu "Ödeme Alındı" yapacaktır.')) return;
+
+    updating = true;
+    try {
+      const res = await fetch(`${API_URL}/admin/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${$adminAuth.token}`
+        },
+        body: JSON.stringify({ status: 'payment_received', note: 'Ödeme manuel olarak onaylandı.' })
+      });
+      const data = await res.json();
+      if (data.success) {
+        order = data.order;
+        logs = data.logs || [];
+        selectedStatus = 'payment_received';
+        alert('Ödeme başarıyla onaylandı!');
+      } else {
+        alert(data.error || 'Ödeme onaylanamadı.');
+      }
+    } catch (e) {
+      alert('İşlem başarısız.');
+    } finally {
+      updating = false;
+    }
+  }
+
   function formatDate(value?: string) {
     if (!value) return '—';
     const date = new Date(value);
@@ -86,7 +115,7 @@
 </script>
 
 <svelte:head>
-  <title>Sipariş Detayı - Admin</title>
+  <title>Sipariş Detayı - Admin - Bezmidar Sitebuilder</title>
 </svelte:head>
 
 <div class="mb-6">
@@ -125,6 +154,24 @@
           <dt class="text-sm font-medium text-gray-500">Paket</dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{order.package_type}</dd>
         </div>
+        {#if (order.order_status ?? order.status) === 'pending_confirmation'}
+        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-amber-50 border-l-4 border-amber-400">
+          <dt class="text-sm font-medium text-amber-800">Hızlı İşlem</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <button
+              class="inline-flex items-center gap-2 rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
+              on:click={markPaymentReceived}
+              disabled={updating}
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              {updating ? 'İşleniyor...' : 'Ödeme Alındı'}
+            </button>
+            <p class="mt-2 text-xs text-amber-700">Ruul.io ödeme e-postasını aldıysanız, bu butona tıklayarak ödemeyi onaylayabilirsiniz.</p>
+          </dd>
+        </div>
+        {/if}
         <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500">Durum Güncelle</dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 space-y-3">

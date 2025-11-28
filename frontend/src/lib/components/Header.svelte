@@ -7,7 +7,7 @@
     <div class="flex justify-between h-16">
       <div class="flex items-center">
         <div class="flex-shrink-0 flex items-center">
-          <a href="/" class="text-2xl font-bold text-blue-600">WebsiteBuilder</a>
+          <a href="/" class="text-2xl font-bold text-blue-600">Bezmidar Sitebuilder</a>
         </div>
         <!-- Main navigation links -->
         <nav class="hidden md:flex space-x-8 ml-10">
@@ -26,7 +26,6 @@
           <a href="/login" class="text-gray-600 hover:text-blue-600">Giriş Yap</a>
           <a href="/register" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Kayıt Ol</a>
         {/if}
-        <a href="/admin/login" class="text-gray-400 hover:text-gray-500 text-sm">Admin</a>
       </div>
     </div>
   </div>

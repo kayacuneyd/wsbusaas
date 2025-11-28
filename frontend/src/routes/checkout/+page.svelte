@@ -35,7 +35,7 @@
 </script>
 
 <svelte:head>
-  <title>Ödeme - WebsiteBuilder</title>
+  <title>Ödeme - Bezmidar Sitebuilder</title>
 </svelte:head>
 
 <div class="py-12 bg-gray-50 min-h-screen">

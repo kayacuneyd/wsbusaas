@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-  <title>Domain Sorgulama - WebsiteBuilder</title>
+  <title>Domain Sorgulama - Bezmidar Sitebuilder</title>
 </svelte:head>
 
 <div class="py-20 bg-gray-50 min-h-[80vh] flex items-center">
