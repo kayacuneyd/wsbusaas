@@ -23,7 +23,12 @@
   $: currentState: OrderStateMeta = getOrderState(statusKey);
   $: progressPercent = getOrderProgressPercent(statusKey);
   $: currentStepIndex = getOrderStateIndex(statusKey);
-  $: statusHistory: StatusHistoryEntry[] = Array.isArray(order?.status_history) ? order.status_history : [];
+  let statusHistory: StatusHistoryEntry[] = [];
+  let historyByStatus: Record<string, StatusHistoryEntry> = {};
+  let orderedHistory: StatusHistoryEntry[] = [];
+  let timelineSteps: { step: OrderStateMeta; index: number; entry?: StatusHistoryEntry }[] = [];
+
+  $: statusHistory = Array.isArray(order?.status_history) ? order.status_history : [];
   $: historyByStatus = statusHistory.reduce<Record<string, StatusHistoryEntry>>((acc, entry) => {
     acc[entry.status] = entry;
     return acc;
