@@ -19,4 +19,3 @@ INSERT IGNORE INTO packages (name, slug, description, price, payment_link, is_ac
 ('Starter Paket', 'starter', 'Temel website paketi - Domain, hosting ve tasarım dahil', 299.00, NULL, TRUE, 1),
 ('Professional Paket', 'professional', 'Profesyonel website paketi - Gelişmiş özellikler', 499.00, NULL, TRUE, 2),
 ('Business Paket', 'business', 'İşletme paketi - Tüm özellikler ve öncelikli destek', 799.00, NULL, TRUE, 3);
-

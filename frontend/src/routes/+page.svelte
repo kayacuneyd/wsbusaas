@@ -131,7 +131,7 @@
       <div class="relative">
         <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">3</div>
         <h3 class="text-xl font-bold mb-2">Siteniz Hazır</h3>
-        <p class="text-gray-600">Uzman ekibimiz sitenizi hazırlasın ve yayına alsın.</p>
+        <p class="text-gray-600">Bezmidar Sitebuilder sitenizi hazırlasın ve yayına alsın.</p>
       </div>
     </div>
   </div>

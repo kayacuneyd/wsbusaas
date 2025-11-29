@@ -12,4 +12,3 @@ CREATE TABLE IF NOT EXISTS contact_messages (
     replied_at DATETIME,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
