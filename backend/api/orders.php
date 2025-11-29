@@ -64,76 +64,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $orderId = $orderService->createOrder($input);
+    try {
+        $created = $orderService->createOrder($input);
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+        exit;
+    }
 
-    if ($orderId) {
-        $initialStatus = OrderService::STATUS_MESSAGES['pending_confirmation'];
+    $orderId = $created['order_id'] ?? null;
+    $paymentUrl = $created['payment_link'] ?? null;
 
-        // Try to fetch payment URL from packages table first
-        $packageType = $input['package_type'] ?? 'starter';
-        $baseUrl = null;
-
-        // Check if packages table exists and try to get payment link from package
-        try {
-            $conn->exec("CREATE TABLE IF NOT EXISTS packages (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
-                slug VARCHAR(100) UNIQUE NOT NULL,
-                description TEXT,
-                price DECIMAL(10,2),
-                payment_link TEXT,
-                is_active BOOLEAN DEFAULT TRUE,
-                display_order INT DEFAULT 0,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-            )");
-
-            $queryPackage = "SELECT payment_link FROM packages WHERE slug = :slug AND is_active = 1 LIMIT 1";
-            $stmtPackage = $conn->prepare($queryPackage);
-            $stmtPackage->bindParam(':slug', $packageType);
-            $stmtPackage->execute();
-            $packagePaymentLink = $stmtPackage->fetchColumn();
-            
-            if ($packagePaymentLink) {
-                $baseUrl = $packagePaymentLink;
-            }
-        } catch (Exception $e) {
-            // Packages table might not exist yet, fall back to settings
-        }
-
-        // Fallback to settings if no package payment link found
-        if (!$baseUrl) {
-            $querySettings = "SELECT value FROM settings WHERE `key` = 'payment_url' LIMIT 1";
-            $stmtSettings = $conn->prepare($querySettings);
-            $stmtSettings->execute();
-            $baseUrl = $stmtSettings->fetchColumn();
-        }
-
-        if (!$baseUrl) {
-            http_response_code(500);
-            echo json_encode(['success' => false, 'error' => 'Payment URL is not configured. Please set it in Admin > Packages or Settings.']);
-            exit;
-        }
-
-        // Append order_id to payment URL
-        $paymentUrl = $baseUrl . (strpos($baseUrl, '?') !== false ? '&' : '%3F') . 'order_id%3D' . $orderId;
-
-        echo json_encode([
-            'success' => true,
-            'order' => [
-                'order_id' => $orderId,
-                'status' => 'pending_confirmation',
-                'status_message' => $initialStatus['en'],
-                'status_messages' => $initialStatus
-            ],
-            'payment' => [
-                'url' => $paymentUrl
-            ]
-        ]);
-    } else {
+    if (!$orderId || !$paymentUrl) {
         http_response_code(500);
         echo json_encode(['success' => false, 'error' => 'Failed to create order']);
+        exit;
     }
+
+    $order = $orderService->getOrderWithStatus($orderId);
+
+    echo json_encode([
+        'success' => true,
+        'order' => $order ?: ['order_id' => $orderId],
+        'payment' => [
+            'url' => $paymentUrl
+        ]
+    ]);
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Get order ID from URL path (handled by .htaccess routing if implemented, or query param)
     // Assuming /api/orders/{id} maps to orders.php?id={id} via .htaccess or we parse URI
@@ -165,7 +121,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $order = $orderService->getOrderWithStatus($orderId);
 
     if ($order) {
-        echo json_encode(['success' => true, 'order' => $order]);
+        $paymentLink = $order['payment_link'] ?? $orderService->ensurePaymentLinkForOrder($orderId, $order['package_type'] ?? null);
+        $order['payment_link'] = $paymentLink;
+
+        echo json_encode([
+            'success' => true,
+            'order' => $order,
+            'payment' => [
+                'url' => $paymentLink
+            ]
+        ]);
     } else {
         http_response_code(404);
         echo json_encode(['success' => false, 'error' => 'Order not found']);

@@ -55,6 +55,27 @@
   function resolveStatus(order: any) {
     return order?.order_status ?? order?.status;
   }
+
+  function isPaymentPending(order: any) {
+    const status = resolveStatus(order);
+    const paymentStatus = order?.payment_status ?? '';
+    return status === 'pending_confirmation' || paymentStatus === 'pending';
+  }
+
+  function handleOrderAction(order: any) {
+    if (isPaymentPending(order) && order?.payment_link) {
+      window.open(order.payment_link, '_blank', 'noopener');
+      return;
+    }
+
+    goto(`/order-status/${order.order_id}`);
+  }
+
+  function viewPayment(order: any) {
+    if (order?.payment_link) {
+      window.open(order.payment_link, '_blank', 'noopener');
+    }
+  }
 </script>
 
 <svelte:head>
@@ -154,32 +175,63 @@
       <ul class="divide-y divide-gray-200">
         {#each orders as order}
           <li>
-            <a href={`/order-status/${order.order_id}`} class="block hover:bg-gray-50">
-              <div class="px-4 py-4 sm:px-6">
-                <div class="flex items-center justify-between">
-                  <p class="text-sm font-medium text-blue-600 truncate">
-                    {order.domain_name}
+            <div
+              role="button"
+              tabindex="0"
+              class={`block px-4 py-4 sm:px-6 transition rounded-lg ${
+                isPaymentPending(order)
+                  ? 'border-2 border-amber-300 bg-amber-50 animate-[pulse_2s_ease-in-out_infinite]'
+                  : 'hover:bg-gray-50'
+              }`}
+              on:click={() => handleOrderAction(order)}
+              on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && handleOrderAction(order)}
+            >
+              <div class="flex items-center justify-between">
+                <p class="text-sm font-medium text-blue-600 truncate">
+                  {order.domain_name}
+                </p>
+                <div class="ml-2 flex-shrink-0 flex">
+                  <p class={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getOrderStatusBadgeClasses(resolveStatus(order))}`}>
+                    {getOrderStatusLabel(resolveStatus(order))}
                   </p>
-                  <div class="ml-2 flex-shrink-0 flex">
-                    <p class={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getOrderStatusBadgeClasses(resolveStatus(order))}`}>
-                      {getOrderStatusLabel(resolveStatus(order))}
-                    </p>
-                  </div>
-                </div>
-                <div class="mt-2 sm:flex sm:justify-between">
-                  <div class="sm:flex">
-                    <p class="flex items-center text-sm text-gray-500">
-                      Paket: {order.package_type}
-                    </p>
-                  </div>
-                  <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                    <p>
-                      Sipariş Tarihi: {new Date(order.created_at).toLocaleDateString('tr-TR')}
-                    </p>
-                  </div>
                 </div>
               </div>
-            </a>
+              <div class="mt-2 sm:flex sm:justify-between">
+                <div class="sm:flex flex-col gap-1">
+                  <p class="flex items-center text-sm text-gray-500">
+                    Paket: {order.package_type}
+                  </p>
+                  {#if isPaymentPending(order)}
+                    <span class="inline-flex w-fit items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800 ring-1 ring-amber-200">
+                      <span class="h-2 w-2 rounded-full bg-amber-500 animate-ping"></span>
+                      Ödeme Bekleniyor
+                    </span>
+                  {/if}
+                </div>
+                <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                  <p>
+                    Sipariş Tarihi: {new Date(order.created_at).toLocaleDateString('tr-TR')}
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-3 flex flex-wrap gap-3">
+                {#if isPaymentPending(order) && order.payment_link}
+                  <button
+                    on:click|stopPropagation={() => viewPayment(order)}
+                    class="inline-flex items-center gap-2 rounded-md bg-amber-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-700"
+                  >
+                    Ödemeyi Tamamla
+                  </button>
+                {/if}
+                <button
+                  on:click|stopPropagation={() => goto(`/order-status/${order.order_id}`)}
+                  class="inline-flex items-center gap-2 rounded-md border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+                >
+                  Durumu Gör
+                </button>
+              </div>
+            </div>
           </li>
         {/each}
       </ul>

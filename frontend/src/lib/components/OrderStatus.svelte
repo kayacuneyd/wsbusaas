@@ -19,8 +19,12 @@
 
   const fallbackState = DEFAULT_ORDER_STATE;
 
+  let statusKey: string = fallbackState.key;
+  let currentState: OrderStateMeta = fallbackState;
+  let progressPercent = 0;
+  let currentStepIndex = 0;
   $: statusKey = order?.order_status ?? order?.status ?? fallbackState.key;
-  $: currentState: OrderStateMeta = getOrderState(statusKey);
+  $: currentState = getOrderState(statusKey);
   $: progressPercent = getOrderProgressPercent(statusKey);
   $: currentStepIndex = getOrderStateIndex(statusKey);
   let statusHistory: StatusHistoryEntry[] = [];

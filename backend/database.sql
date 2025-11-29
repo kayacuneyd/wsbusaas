@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS orders (
     template_config JSON,
     payment_status ENUM('pending', 'paid', 'failed', 'refunded') DEFAULT 'pending',
     payment_reference VARCHAR(255),
+    payment_link TEXT,
     payment_date DATETIME,
     order_status ENUM('pending_confirmation', 'payment_received', 'processing', 'completed', 'cancelled', 'failed') DEFAULT 'pending_confirmation',
     status_message TEXT,

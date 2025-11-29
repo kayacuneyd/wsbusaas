@@ -2,8 +2,10 @@
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../config/Database.php';
 require_once __DIR__ . '/../../services/JwtService.php';
+require_once __DIR__ . '/../../services/OrderService.php';
 
 use App\Services\JwtService;
+use App\Services\OrderService;
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -39,8 +41,8 @@ if (!$userId) {
 }
 
 try {
-    $database = new App\Config\Database();
-    $conn = $database->getConnection();
+    $orderService = new OrderService();
+    $conn = $orderService->conn;
 
     $query = "SELECT * FROM orders WHERE user_id = :user_id ORDER BY created_at DESC";
     $stmt = $conn->prepare($query);
@@ -48,6 +50,12 @@ try {
     $stmt->execute();
 
     $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($orders as &$order) {
+        if (empty($order['payment_link']) && ($order['order_status'] ?? '') === 'pending_confirmation') {
+            $order['payment_link'] = $orderService->ensurePaymentLinkForOrder($order['order_id'], $order['package_type'] ?? null);
+        }
+    }
 
     echo json_encode(['success' => true, 'orders' => $orders]);
 

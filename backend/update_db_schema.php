@@ -11,6 +11,16 @@ try {
 
     $log = [];
 
+    // 0. Ensure 'payment_link' column exists on orders
+    $stmt = $conn->query("SHOW COLUMNS FROM orders LIKE 'payment_link'");
+    if ($stmt->rowCount() == 0) {
+        $sql = "ALTER TABLE orders ADD COLUMN payment_link TEXT AFTER payment_reference";
+        $conn->exec($sql);
+        $log[] = "Added payment_link column to 'orders' table.";
+    } else {
+        $log[] = "'orders' table already has payment_link column.";
+    }
+
     // 1. Update 'orders' table
     $stmt = $conn->query("SHOW COLUMNS FROM orders LIKE 'status_message'");
     if ($stmt->rowCount() == 0) {

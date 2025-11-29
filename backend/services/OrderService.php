@@ -53,16 +53,106 @@ class OrderService
         $this->conn = $database->getConnection();
     }
 
+    private function ensurePackagesTable(): void
+    {
+        $this->conn->exec("CREATE TABLE IF NOT EXISTS packages (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            slug VARCHAR(100) UNIQUE NOT NULL,
+            description TEXT,
+            price DECIMAL(10,2),
+            payment_link TEXT,
+            is_active BOOLEAN DEFAULT TRUE,
+            display_order INT DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )");
+    }
+
+    private function getPaymentBaseUrl(?string $packageSlug = null): ?string
+    {
+        $slug = $packageSlug ?: 'starter';
+
+        try {
+            $this->ensurePackagesTable();
+
+            $queryPackage = "SELECT payment_link FROM packages WHERE slug = :slug AND is_active = 1 LIMIT 1";
+            $stmtPackage = $this->conn->prepare($queryPackage);
+            $stmtPackage->bindParam(':slug', $slug);
+            $stmtPackage->execute();
+            $packagePaymentLink = $stmtPackage->fetchColumn();
+
+            if ($packagePaymentLink) {
+                return $packagePaymentLink;
+            }
+        } catch (\Exception $e) {
+            // packages table might not exist yet, fall back to settings
+        }
+
+        $querySettings = "SELECT value FROM settings WHERE `key` = 'payment_url' LIMIT 1";
+        $stmtSettings = $this->conn->prepare($querySettings);
+        $stmtSettings->execute();
+        $baseUrl = $stmtSettings->fetchColumn();
+
+        return $baseUrl ?: null;
+    }
+
+    private function buildPaymentUrl(?string $baseUrl, string $orderId): ?string
+    {
+        if (!$baseUrl) {
+            return null;
+        }
+
+        $separator = (strpos($baseUrl, '?') !== false) ? '&' : '?';
+        return rtrim($baseUrl) . $separator . 'order_id=' . urlencode($orderId);
+    }
+
+    public function ensurePaymentLinkForOrder(string $orderId, ?string $packageType = null): ?string
+    {
+        $order = $this->getOrder($orderId);
+        if ($order && !empty($order['payment_link'])) {
+            return $order['payment_link'];
+        }
+
+        $packageSlug = $packageType;
+        if (!$packageSlug && is_array($order) && isset($order['package_type'])) {
+            $packageSlug = $order['package_type'];
+        }
+
+        $paymentLink = $this->buildPaymentUrl(
+            $this->getPaymentBaseUrl($packageSlug ?? 'starter'),
+            $orderId
+        );
+
+        if (!$paymentLink) {
+            return null;
+        }
+
+        $query = "UPDATE " . $this->table . " SET payment_link = :payment_link WHERE order_id = :order_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':payment_link', $paymentLink);
+        $stmt->bindParam(':order_id', $orderId);
+        $stmt->execute();
+
+        return $paymentLink;
+    }
+
     public function createOrder($data)
     {
         $orderId = 'WB' . date('YmdHis') . rand(100, 999);
+        $packageType = $data['package_type'] ?? 'starter';
         $status = self::DEFAULT_STATUS;
         $statusMessage = self::STATUS_MESSAGES[$status]['en'];
         $statusUpdatedBy = 'system';
+        $paymentLink = $this->buildPaymentUrl($this->getPaymentBaseUrl($packageType), $orderId);
+
+        if (!$paymentLink) {
+            throw new \RuntimeException('Payment URL is not configured. Please set it in Admin > Packages or Settings.');
+        }
 
         $query = "INSERT INTO " . $this->table . " 
-                  (order_id, user_id, customer_email, customer_name, domain_name, package_type, order_status, status_message, status_updated_at, status_updated_by) 
-                  VALUES (:order_id, :user_id, :email, :name, :domain, :package, :status, :status_message, NOW(), :status_updated_by)";
+                  (order_id, user_id, customer_email, customer_name, domain_name, package_type, order_status, status_message, payment_link, status_updated_at, status_updated_by) 
+                  VALUES (:order_id, :user_id, :email, :name, :domain, :package, :status, :status_message, :payment_link, NOW(), :status_updated_by)";
 
         $stmt = $this->conn->prepare($query);
 
@@ -71,15 +161,19 @@ class OrderService
         $stmt->bindParam(':email', $data['customer_email']);
         $stmt->bindParam(':name', $data['customer_name']);
         $stmt->bindParam(':domain', $data['domain_name']);
-        $stmt->bindParam(':package', $data['package_type']);
+        $stmt->bindParam(':package', $packageType);
         $stmt->bindParam(':status', $status);
         $stmt->bindParam(':status_message', $statusMessage);
+        $stmt->bindParam(':payment_link', $paymentLink);
         $stmt->bindParam(':status_updated_by', $statusUpdatedBy);
 
         if ($stmt->execute()) {
             $this->logOrder($orderId, 'info', 'Sipariş oluşturuldu');
             $this->recordStatusHistory($orderId, $status, $statusMessage, $statusUpdatedBy);
-            return $orderId;
+            return [
+                'order_id' => $orderId,
+                'payment_link' => $paymentLink,
+            ];
         }
 
         return false;
@@ -100,6 +194,9 @@ class OrderService
         $order = $this->getOrder($orderId);
         if ($order) {
             $order['status_history'] = $this->getStatusHistory($orderId);
+            if (empty($order['payment_link'])) {
+                $order['payment_link'] = $this->ensurePaymentLinkForOrder($orderId, $order['package_type'] ?? null);
+            }
         }
 
         return $order;
