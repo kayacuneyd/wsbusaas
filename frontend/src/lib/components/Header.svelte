@@ -1,17 +1,13 @@
 <script lang="ts">
   import { customerAuth } from '$lib/stores/auth';
-  import { t, locale, locales } from 'svelte-i18n';
+  import { t, locale } from 'svelte-i18n';
   import { page } from '$app/stores';
+  import LanguageSwitcher from './LanguageSwitcher.svelte';
 
   let isMobileMenuOpen = false;
 
   function toggleMobileMenu() {
     isMobileMenuOpen = !isMobileMenuOpen;
-  }
-
-  function changeLanguage(lang: string) {
-    locale.set(lang);
-    localStorage.setItem('locale', lang);
   }
 </script>
 
@@ -37,27 +33,8 @@
 
       <div class="flex items-center space-x-4">
         <!-- Language Switcher -->
-        <div class="hidden md:flex items-center space-x-2 mr-4 border-r border-gray-200 pr-4">
-          <button 
-            class="text-sm font-medium hover:text-brand-dark transition-colors {$locale === 'tr' ? 'text-brand-dark font-bold' : 'text-gray-500'}"
-            on:click={() => changeLanguage('tr')}
-          >
-            TR
-          </button>
-          <span class="text-gray-300">|</span>
-          <button 
-            class="text-sm font-medium hover:text-brand-dark transition-colors {$locale === 'en' ? 'text-brand-dark font-bold' : 'text-gray-500'}"
-            on:click={() => changeLanguage('en')}
-          >
-            EN
-          </button>
-          <span class="text-gray-300">|</span>
-          <button 
-            class="text-sm font-medium hover:text-brand-dark transition-colors {$locale === 'de' ? 'text-brand-dark font-bold' : 'text-gray-500'}"
-            on:click={() => changeLanguage('de')}
-          >
-            DE
-          </button>
+        <div class="hidden md:block mr-4 border-r border-gray-200 pr-4">
+          <LanguageSwitcher />
         </div>
 
         <div class="hidden md:flex items-center space-x-4">
@@ -119,11 +96,7 @@
       <div class="pt-4 pb-4 border-t border-gray-200 px-4">
         <div class="flex items-center justify-between mb-4">
           <span class="text-sm font-medium text-gray-500">Language</span>
-          <div class="flex space-x-4">
-            <button class="{$locale === 'tr' ? 'font-bold text-brand-dark' : 'text-gray-500'}" on:click={() => changeLanguage('tr')}>TR</button>
-            <button class="{$locale === 'en' ? 'font-bold text-brand-dark' : 'text-gray-500'}" on:click={() => changeLanguage('en')}>EN</button>
-            <button class="{$locale === 'de' ? 'font-bold text-brand-dark' : 'text-gray-500'}" on:click={() => changeLanguage('de')}>DE</button>
-          </div>
+          <LanguageSwitcher />
         </div>
 
         {#if $customerAuth.isAuthenticated}

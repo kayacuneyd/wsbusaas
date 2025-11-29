@@ -1,0 +1,47 @@
+{
+  "common": {
+    "home": "Ana Sayfa",
+    "packages": "Paketler",
+    "login": "Giriş Yap",
+    "register": "Kayıt Ol",
+    "logout": "Çıkış",
+    "account": "Hesabım",
+    "contact": "İletişim",
+    "impressum": "Künye",
+    "privacy": "Gizlilik Politikası",
+    "rights_reserved": "Tüm hakları saklıdır."
+  },
+  "home": {
+    "hero_title": "Profesyonel Web Siteniz Hazır ve Çalışır",
+    "hero_subtitle": "Domain, hosting ve özel tasarım tek pakette. Teknik bilgi gerektirmez. Biz hallederiz.",
+    "cta_button": "Hemen Başlayın →",
+    "features": {
+      "domain_title": "Domain",
+      "domain_desc": "1 Yıllık .de veya .com domain dahil",
+      "hosting_title": "Hosting",
+      "hosting_desc": "Hızlı SSD hosting ve SSL sertifikası",
+      "design_title": "Tasarım",
+      "design_desc": "Modern, mobil uyumlu profesyonel tasarım",
+      "maintenance_title": "Bakım",
+      "maintenance_desc": "7/24 teknik destek ve güncellemeler"
+    },
+    "pricing": {
+      "title": "Basit Fiyatlandırma",
+      "subtitle": "Gizli ücret yok. Her şey dahil tek fiyat.",
+      "loading": "Paketler yükleniyor...",
+      "error": "Paketler yüklenemedi.",
+      "no_packages": "Şu an aktif paket bulunmuyor.",
+      "per_year": "/yıl",
+      "select_button": "Seç ve Devam Et →"
+    },
+    "how_it_works": {
+      "title": "Nasıl Çalışır?",
+      "step1_title": "Domain Seçin",
+      "step1_desc": "İşletmeniz için en uygun domain adını sorgulayın ve seçin.",
+      "step2_title": "Ödeme Yapın",
+      "step2_desc": "Güvenli ödeme altyapımız ile paketinizi satın alın.",
+      "step3_title": "Siteniz Hazır",
+      "step3_desc": "Bezmidar Sitebuilder sitenizi hazırlasın ve yayına alsın."
+    }
+  }
+}
