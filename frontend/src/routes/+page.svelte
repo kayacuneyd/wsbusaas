@@ -1,9 +1,44 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { onMount } from 'svelte';
+  import { fetchPackages } from '$lib/api';
+
+  type PackageItem = {
+    id: number;
+    name: string;
+    slug: string;
+    description?: string | null;
+    price?: number | null;
+    payment_link?: string | null;
+  };
 
   function scrollToPricing() {
     const el = document.getElementById('pricing');
     el?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  let packages: PackageItem[] = [];
+  let loadingPackages = true;
+  let packagesError = '';
+
+  onMount(async () => {
+    try {
+      const data = await fetchPackages();
+      if (data.success) {
+        packages = data.packages || [];
+      } else {
+        packagesError = data.error || 'Paketler yüklenemedi.';
+      }
+    } catch (e) {
+      packagesError = 'Paketler yüklenemedi.';
+    } finally {
+      loadingPackages = false;
+    }
+  });
+
+  function formatPrice(price?: number | null) {
+    if (price === null || price === undefined) return '—';
+    return `${price}€`;
   }
 </script>
 
@@ -66,47 +101,39 @@
       <p class="mt-4 text-xl text-gray-600">Gizli ücret yok. Her şey dahil tek fiyat.</p>
     </div>
 
-    <div class="max-w-lg mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
-      <div class="px-6 py-8 bg-blue-600 text-white text-center">
-        <h3 class="text-2xl font-bold">Starter Paket</h3>
-        <div class="mt-4 flex justify-center items-baseline">
-          <span class="text-5xl font-extrabold">299€</span>
-          <span class="ml-1 text-xl text-blue-100">/yıl</span>
+    <div class="max-w-5xl mx-auto">
+      {#if loadingPackages}
+        <div class="text-center text-gray-500">Paketler yükleniyor...</div>
+      {:else if packagesError}
+        <div class="text-center text-red-600">{packagesError}</div>
+      {:else if packages.length === 0}
+        <div class="text-center text-gray-500">Şu an aktif paket bulunmuyor.</div>
+      {:else}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {#each packages as pkg}
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 flex flex-col">
+              <div class="px-6 py-6 bg-blue-600 text-white">
+                <h3 class="text-2xl font-bold">{pkg.name}</h3>
+                <div class="mt-3 flex items-baseline gap-2">
+                  <span class="text-4xl font-extrabold">{formatPrice(pkg.price)}</span>
+                  <span class="text-sm text-blue-100">/yıl</span>
+                </div>
+              </div>
+              <div class="px-6 py-6 flex-1 flex flex-col gap-4">
+                <p class="text-sm text-gray-700 min-h-[48px]">{pkg.description || 'Her şey dahil, kuruluma hazır paket.'}</p>
+                <div class="mt-auto">
+                  <a
+                    href={`/domain-check?package=${encodeURIComponent(pkg.slug)}`}
+                    class="block w-full bg-blue-600 text-white text-center px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300"
+                  >
+                    Seç ve Devam Et →
+                  </a>
+                </div>
+              </div>
+            </div>
+          {/each}
         </div>
-      </div>
-      <div class="px-6 py-8">
-        <ul class="space-y-4">
-          <li class="flex items-center">
-            <svg class="h-6 w-6 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            <span class="text-gray-700">.de veya .com domain</span>
-          </li>
-          <li class="flex items-center">
-            <svg class="h-6 w-6 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            <span class="text-gray-700">Hızlı SSD hosting</span>
-          </li>
-          <li class="flex items-center">
-            <svg class="h-6 w-6 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            <span class="text-gray-700">SSL sertifikası (Güvenli Bağlantı)</span>
-          </li>
-          <li class="flex items-center">
-            <svg class="h-6 w-6 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            <span class="text-gray-700">Profesyonel Tasarım</span>
-          </li>
-          <li class="flex items-center">
-            <svg class="h-6 w-6 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            <span class="text-gray-700">Mobil Uyumlu</span>
-          </li>
-          <li class="flex items-center">
-            <svg class="h-6 w-6 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            <span class="text-gray-700">1 Yıl Teknik Destek</span>
-          </li>
-        </ul>
-        <div class="mt-8">
-          <a href="/domain-check" class="block w-full bg-blue-600 text-white text-center px-6 py-4 rounded-lg font-bold hover:bg-blue-700 transition duration-300">
-            Domain Seçin →
-          </a>
-        </div>
-      </div>
+      {/if}
     </div>
   </div>
 </section>

@@ -46,3 +46,13 @@ export async function createOrder(data: any, token?: string) {
 
   return response.json();
 }
+
+export async function fetchPackages() {
+  const response = await fetch(`${API_URL}/packages`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  return response.json();
+}
