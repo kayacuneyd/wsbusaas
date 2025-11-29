@@ -9,6 +9,7 @@
     slug: string;
     description?: string | null;
     price?: number | null;
+    category?: string | null;
     payment_link?: string | null;
   };
 
@@ -114,6 +115,7 @@
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 flex flex-col">
               <div class="px-6 py-6 bg-blue-600 text-white">
                 <h3 class="text-2xl font-bold">{pkg.name}</h3>
+                <p class="mt-1 text-sm text-blue-100 capitalize">{pkg.category || 'paket'}</p>
                 <div class="mt-3 flex items-baseline gap-2">
                   <span class="text-4xl font-extrabold">{formatPrice(pkg.price)}</span>
                   <span class="text-sm text-blue-100">/yıl</span>

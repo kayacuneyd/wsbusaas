@@ -11,6 +11,19 @@ try {
 
     $log = [];
 
+    // -1. Ensure 'category' on packages
+    try {
+        $stmt = $conn->query("SHOW COLUMNS FROM packages LIKE 'category'");
+        if ($stmt->rowCount() == 0) {
+            $conn->exec("ALTER TABLE packages ADD COLUMN category VARCHAR(100) DEFAULT 'general' AFTER price");
+            $log[] = "Added category column to 'packages' table.";
+        } else {
+            $log[] = "'packages' table already has category column.";
+        }
+    } catch (Exception $e) {
+        $log[] = "Could not adjust 'packages' table: " . $e->getMessage();
+    }
+
     // 0. Ensure 'payment_link' column exists on orders
     $stmt = $conn->query("SHOW COLUMNS FROM orders LIKE 'payment_link'");
     if ($stmt->rowCount() == 0) {

@@ -96,7 +96,9 @@
           <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div class="text-amber-800">
               <p class="text-lg font-bold">Ödeme Bekleniyor</p>
-              <p class="text-sm">Ödemenizi tamamladığınızda siparişiniz otomatik olarak işleme alınacaktır.</p>
+              <p class="text-sm">
+                Ödemenizi tamamladığınızda siparişiniz otomatik olarak işleme alınacaktır. Ödeme sayfasını yeniden açmak için aşağıdaki butonu kullanın.
+              </p>
             </div>
             <div class="flex flex-wrap gap-3">
               <button
@@ -126,7 +128,7 @@
               </svg>
               <div class="text-center">
                 <p class="text-xl font-bold text-amber-800 animate-pulse">Ödeme İşleminizi Tamamlayınız</p>
-                <p class="text-sm text-amber-700 mt-1">Ödeme onaylandıktan sonra siparişiniz işleme alınacaktır.</p>
+                <p class="text-sm text-amber-700 mt-1">Ödeme onaylandıktan sonra siparişiniz işleme alınacaktır. Ödeme sayfasını kapattıysanız yeniden açabilirsiniz.</p>
               </div>
             </div>
           </div>

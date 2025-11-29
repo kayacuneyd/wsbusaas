@@ -91,6 +91,7 @@ function normalizePackageInput(array $input): array
     $clean['name'] = $input['name'] ?? null;
     $clean['slug'] = $input['slug'] ?? null;
     $clean['description'] = $input['description'] ?? null;
+    $clean['category'] = $input['category'] ?? 'general';
 
     // Normalize price: allow null or numeric
     $price = $input['price'] ?? null;
@@ -134,13 +135,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
     
     try {
-        $query = "INSERT INTO packages (name, slug, description, price, payment_link, is_active, display_order) 
-                  VALUES (:name, :slug, :description, :price, :payment_link, :is_active, :display_order)";
+        $query = "INSERT INTO packages (name, slug, description, price, category, payment_link, is_active, display_order) 
+                  VALUES (:name, :slug, :description, :price, :category, :payment_link, :is_active, :display_order)";
         $stmt = $conn->prepare($query);
         $stmt->bindValue(':name', $input['name']);
         $stmt->bindValue(':slug', $input['slug']);
         $stmt->bindValue(':description', $input['description'] ?? null);
         $stmt->bindValue(':price', $input['price'], $input['price'] === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+        $stmt->bindValue(':category', $input['category']);
         $stmt->bindValue(':payment_link', $input['payment_link'], $input['payment_link'] === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
         $stmt->bindValue(':is_active', $input['is_active'], PDO::PARAM_BOOL);
         $stmt->bindValue(':display_order', $input['display_order'], PDO::PARAM_INT);
@@ -173,6 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   slug = :slug, 
                   description = :description, 
                   price = :price, 
+                  category = :category,
                   payment_link = :payment_link, 
                   is_active = :is_active, 
                   display_order = :display_order
@@ -183,6 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $stmt->bindValue(':slug', $input['slug']);
         $stmt->bindValue(':description', $input['description'] ?? null);
         $stmt->bindValue(':price', $input['price'], $input['price'] === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+        $stmt->bindValue(':category', $input['category']);
         $stmt->bindValue(':payment_link', $input['payment_link'], $input['payment_link'] === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
         $stmt->bindValue(':is_active', $input['is_active'], PDO::PARAM_BOOL);
         $stmt->bindValue(':display_order', $input['display_order'], PDO::PARAM_INT);

@@ -51,6 +51,23 @@ class OrderService
     {
         $database = new Database();
         $this->conn = $database->getConnection();
+        $this->ensureOrderPaymentLinkColumn();
+    }
+
+    private function ensureOrderPaymentLinkColumn(): void
+    {
+        if (!$this->conn) {
+            return;
+        }
+
+        try {
+            $stmt = $this->conn->query("SHOW COLUMNS FROM orders LIKE 'payment_link'");
+            if ($stmt->rowCount() === 0) {
+                $this->conn->exec("ALTER TABLE orders ADD COLUMN payment_link TEXT AFTER payment_reference");
+            }
+        } catch (\Exception $e) {
+            // If schema change fails, we let the calling flow handle DB errors
+        }
     }
 
     private function ensurePackagesTable(): void

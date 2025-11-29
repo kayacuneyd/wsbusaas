@@ -35,7 +35,7 @@ try {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )");
 
-    $query = "SELECT id, name, slug, description, price, payment_link, is_active, display_order 
+    $query = "SELECT id, name, slug, description, price, category, payment_link, is_active, display_order 
               FROM packages 
               WHERE is_active = 1 
               ORDER BY display_order ASC, id ASC";
