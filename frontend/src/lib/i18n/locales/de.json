@@ -1,0 +1,47 @@
+{
+  "common": {
+    "home": "Startseite",
+    "packages": "Pakete",
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "logout": "Abmelden",
+    "account": "Mein Konto",
+    "contact": "Kontakt",
+    "impressum": "Impressum",
+    "privacy": "Datenschutz",
+    "rights_reserved": "Alle Rechte vorbehalten."
+  },
+  "home": {
+    "hero_title": "Domain, Hosting & Design in einem Paket",
+    "hero_subtitle": "Alles, was Sie für Ihre professionelle Website benötigen. Starten Sie jetzt!",
+    "cta_button": "Jetzt Starten →",
+    "features": {
+      "domain_title": "Domain",
+      "domain_desc": "1 Jahr .de oder .com Domain inklusive",
+      "hosting_title": "Hosting",
+      "hosting_desc": "Schnelles SSD-Hosting und SSL-Zertifikat",
+      "design_title": "Design",
+      "design_desc": "Modernes, mobilfreundliches professionelles Design",
+      "maintenance_title": "Wartung",
+      "maintenance_desc": "24/7 technischer Support und Updates"
+    },
+    "pricing": {
+      "title": "Einfache Preisgestaltung",
+      "subtitle": "Keine versteckten Gebühren. Alles inklusive ein Preis.",
+      "loading": "Pakete werden geladen...",
+      "error": "Pakete konnten nicht geladen werden.",
+      "no_packages": "Derzeit keine aktiven Pakete.",
+      "per_year": "/Jahr",
+      "select_button": "Auswählen & Weiter →"
+    },
+    "how_it_works": {
+      "title": "Wie funktioniert es?",
+      "step1_title": "Domain wählen",
+      "step1_desc": "Suchen und wählen Sie den besten Domainnamen für Ihr Unternehmen.",
+      "step2_title": "Zahlung tätigen",
+      "step2_desc": "Kaufen Sie Ihr Paket mit unserer sicheren Zahlungsinfrastruktur.",
+      "step3_title": "Ihre Seite ist bereit",
+      "step3_desc": "Bezmidar Sitebuilder bereitet Ihre Seite vor und veröffentlicht sie."
+    }
+  }
+}

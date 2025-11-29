@@ -4,6 +4,8 @@
   import Footer from "$lib/components/Footer.svelte";
   import { onMount } from 'svelte';
   import { seoSettings, loadSEOSettings } from '$lib/stores/seo';
+  import { isLoading } from 'svelte-i18n';
+  import '$lib/i18n'; // Initialize i18n
 
   onMount(async () => {
     await loadSEOSettings();
@@ -25,10 +27,16 @@
   {/if}
 </svelte:head>
 
-<div class="flex flex-col min-h-screen bg-gray-50">
-  <Header />
-  <main class="flex-grow">
-    <slot />
-  </main>
-  <Footer />
-</div>
+{#if $isLoading}
+  <div class="flex items-center justify-center min-h-screen bg-gray-50">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-dark"></div>
+  </div>
+{:else}
+  <div class="flex flex-col min-h-screen bg-gray-50">
+    <Header />
+    <main class="flex-grow">
+      <slot />
+    </main>
+    <Footer />
+  </div>
+{/if}

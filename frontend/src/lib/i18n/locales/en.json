@@ -1,0 +1,47 @@
+{
+  "common": {
+    "home": "Home",
+    "packages": "Packages",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "account": "My Account",
+    "contact": "Contact",
+    "impressum": "Imprint",
+    "privacy": "Privacy Policy",
+    "rights_reserved": "All rights reserved."
+  },
+  "home": {
+    "hero_title": "Domain, Hosting & Design in One Package",
+    "hero_subtitle": "Everything you need to build your professional website. Start now!",
+    "cta_button": "Start Now →",
+    "features": {
+      "domain_title": "Domain",
+      "domain_desc": "1 Year .de or .com domain included",
+      "hosting_title": "Hosting",
+      "hosting_desc": "Fast SSD hosting and SSL certificate",
+      "design_title": "Design",
+      "design_desc": "Modern, mobile-friendly professional design",
+      "maintenance_title": "Maintenance",
+      "maintenance_desc": "24/7 technical support and updates"
+    },
+    "pricing": {
+      "title": "Simple Pricing",
+      "subtitle": "No hidden fees. All inclusive one price.",
+      "loading": "Loading packages...",
+      "error": "Failed to load packages.",
+      "no_packages": "No active packages at the moment.",
+      "per_year": "/year",
+      "select_button": "Select & Continue →"
+    },
+    "how_it_works": {
+      "title": "How it Works?",
+      "step1_title": "Choose Domain",
+      "step1_desc": "Search and select the best domain name for your business.",
+      "step2_title": "Make Payment",
+      "step2_desc": "Purchase your package with our secure payment infrastructure.",
+      "step3_title": "Your Site is Ready",
+      "step3_desc": "Bezmidar Sitebuilder prepares and publishes your site."
+    }
+  }
+}
