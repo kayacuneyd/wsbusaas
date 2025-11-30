@@ -10,11 +10,18 @@ if (file_exists(__DIR__ . $uri) && !is_dir(__DIR__ . $uri)) {
 
 // Handle API routes
 if (strpos($uri, '/api/') === 0) {
-    // Remove /api/ prefix
+    // Remove /api/ prefix and query string
     $path = substr($uri, 5);
 
-    // Check if it maps to a PHP file
-    $file = __DIR__ . '/api/' . $path . '.php';
+    // Remove trailing slash
+    $path = rtrim($path, '/');
+
+    // Check if it maps to a PHP file (add .php extension if missing)
+    if (substr($path, -4) !== '.php') {
+        $file = __DIR__ . '/api/' . $path . '.php';
+    } else {
+        $file = __DIR__ . '/api/' . $path;
+    }
 
     // Handle parameterized routes like /api/orders/WB123
     if (!file_exists($file)) {
@@ -27,12 +34,14 @@ if (strpos($uri, '/api/') === 0) {
                 // Pass the full route to the script via $_GET['route'] to mimic .htaccess
                 $_GET['route'] = $path;
                 require $file;
-                return;
+                return true;
             }
         }
-    } else {
+    }
+
+    if (file_exists($file)) {
         require $file;
-        return;
+        return true;
     }
 }
 

@@ -14,15 +14,44 @@ RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Route /api/admin/orders/{id} to api/admin/orders.php with route param
-RewriteRule ^api/admin/orders/(.*)$ api/admin/orders.php?route=admin/orders/$1 [L,QSA]
+# --- Public Endpoints ---
+RewriteRule ^api/check-domain/?$ api/check-domain.php [L,QSA]
+RewriteRule ^api/contact/?$ api/contact.php [L,QSA]
+RewriteRule ^api/packages/?$ api/packages.php [L,QSA]
+RewriteRule ^api/seo/?$ api/seo.php [L,QSA]
+RewriteRule ^api/test_db/?$ api/test_db.php [L,QSA]
 
-# Route /api/orders/{id} to api/orders.php with route param
-RewriteRule ^api/orders/(.*)$ api/orders.php?route=orders/$1 [L,QSA]
+# --- Customer Endpoints ---
+# Handle /api/orders and /api/orders/{id}
+RewriteRule ^api/orders/?$ api/orders.php [L,QSA]
+RewriteRule ^api/orders/(.+)$ api/orders.php?route=orders/$1 [L,QSA]
 
-# Route /api/xyz to api/xyz.php (Only if file exists)
-RewriteCond %{DOCUMENT_ROOT}/api/$1.php -f
-RewriteRule ^api/(.*)$ api/$1.php [L]
+# --- Auth Endpoints ---
+RewriteRule ^api/auth/login/?$ api/auth/login.php [L,QSA]
+RewriteRule ^api/auth/me/?$ api/auth/me.php [L,QSA]
+RewriteRule ^api/auth/register/?$ api/auth/register.php [L,QSA]
+
+# --- User Endpoints ---
+RewriteRule ^api/user/orders/?$ api/user/orders.php [L,QSA]
+
+# --- Admin Endpoints ---
+RewriteRule ^api/admin/deploy/?$ api/admin/deploy.php [L,QSA]
+RewriteRule ^api/admin/diagnose/?$ api/admin/diagnose.php [L,QSA]
+RewriteRule ^api/admin/login/?$ api/admin/login.php [L,QSA]
+RewriteRule ^api/admin/messages/?$ api/admin/messages.php [L,QSA]
+RewriteRule ^api/admin/packages/?$ api/admin/packages.php [L,QSA]
+RewriteRule ^api/admin/seo/?$ api/admin/seo.php [L,QSA]
+RewriteRule ^api/admin/settings/?$ api/admin/settings.php [L,QSA]
+RewriteRule ^api/admin/stats/?$ api/admin/stats.php [L,QSA]
+RewriteRule ^api/admin/unmatched/?$ api/admin/unmatched.php [L,QSA]
+
+# Handle /api/admin/orders and /api/admin/orders/{id}
+RewriteRule ^api/admin/orders/?$ api/admin/orders.php [L,QSA]
+RewriteRule ^api/admin/orders/(.+)$ api/admin/orders.php?route=admin/orders/$1 [L,QSA]
+
+# Fallback for anything else in /api (optional, but good for safety)
+# RewriteCond %{DOCUMENT_ROOT}/api/$1.php -f
+# RewriteRule ^api/(.*)$ api/$1.php [L]
 
 # Route everything else to index.php (optional, for 404s or root)
 RewriteRule ^$ index.php [L]

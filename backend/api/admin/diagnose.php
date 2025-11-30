@@ -1,6 +1,5 @@
 <?php
-// Manual CORS to ensure visibility
-header('Access-Control-Allow-Origin: *');
+require_once __DIR__ . '/../cors.php';
 header('Content-Type: application/json');
 
 $results = [

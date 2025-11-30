@@ -1,0 +1,1945 @@
+[0m🚀 Starting CORS Test Suite
+[0m[0mBase URL: http://localhost:8000/api
+
+[0m[1;34m📡 Test Category: Basic Connectivity
+[0m[32m  ✓ Basic GET request[0m[0m
+[0m[1;34m
+🔍 Test Category: Preflight (OPTIONS) Requests
+[0m[32m  ✓ OPTIONS request from http://localhost:5173[0m[0m
+[0m[32m  ✓ OPTIONS request from http://localhost:4173[0m[0m
+[0m[32m  ✓ OPTIONS request from https://bezmidar.de[0m[0m
+[0m[32m  ✓ OPTIONS request from https://www.bezmidar.de[0m[0m
+[0m[32m  ✓ OPTIONS request from https://evil-site.com[0m[0m
+[0m[1;34m
+🌐 Test Category: Origin Validation
+[0m[32m  ✓ Origin http://localhost:5173 should be allowed[0m[0m
+[0m[32m  ✓ Origin http://localhost:4173 should be allowed[0m[0m
+[0m[32m  ✓ Origin https://bezmidar.de should be allowed[0m[0m
+[0m[32m  ✓ Origin https://www.bezmidar.de should be allowed[0m[0m
+[0m[32m  ✓ Origin https://evil-site.com should be blocked[0m[0m
+[0m[1;34m
+🔧 Test Category: HTTP Methods
+[0m[32m  ✓ GET request[0m[0m
+[0m[32m  ✓ POST request[0m[0m
+[0m[32m  ✓ PUT request[0m[0m
+[0m[32m  ✓ PATCH request[0m[0m
+[0m[32m  ✓ DELETE request[0m[0m
+[0m[1;34m
+📋 Test Category: Custom Headers
+[0m[32m  ✓ Custom headers accepted[0m[0m
+[0m[1;34m
+🔐 Test Category: Credentials
+[0m[32m  ✓ Credentials included[0m[0m
+[0m[1;34m
+🎯 Test Category: Existing API Endpoints
+[0m[32m  ✓ GET /packages[0m[0m
+[0m[32m  ✓ POST /check-domain[0m[0m
+[0m[32m  ✓ POST /contact[0m[0m
+[0m{
+    "total": 21,
+    "passed": 21,
+    "failed": 0,
+    "success_rate": 100,
+    "results": [
+        {
+            "test": "Basic GET request",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "http:\/\/localhost:5173",
+                    "access-control-allow-credentials": "true",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                    "access-control-max-age": "86400",
+                    "vary": "Origin",
+                    "content-type": "application\/json"
+                },
+                "body": {
+                    "success": true,
+                    "timestamp": "2025-11-30 22:57:17",
+                    "test_type": "basic",
+                    "request_info": {
+                        "method": "GET",
+                        "origin": "http:\/\/localhost:5173",
+                        "referer": "not-provided",
+                        "user_agent": "not-provided",
+                        "host": "localhost:8000",
+                        "remote_addr": "::1"
+                    },
+                    "cors_headers_sent": {
+                        "Access-Control-Allow-Origin": "http:\/\/localhost:5173",
+                        "Access-Control-Allow-Credentials": "true",
+                        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                        "Access-Control-Max-Age": "86400",
+                        "Vary": "Origin"
+                    },
+                    "request_headers": {
+                        "HOST": "localhost:8000",
+                        "ACCEPT": "*\/*",
+                        "ORIGIN": "http:\/\/localhost:5173"
+                    },
+                    "server_info": {
+                        "php_version": "8.4.14",
+                        "server_software": "PHP\/8.4.14 (Development Server)",
+                        "document_root": "\/Users\/thomasmuentzer\/Desktop\/wsbusaas\/backend",
+                        "script_filename": "\/Users\/thomasmuentzer\/Desktop\/wsbusaas\/backend\/api\/test\/cors-diagnostics.php"
+                    },
+                    "allowed_origins": [
+                        "https:\/\/bezmidar.de",
+                        "https:\/\/www.bezmidar.de",
+                        "http:\/\/localhost:5173",
+                        "http:\/\/localhost:4173"
+                    ],
+                    "test_details": {
+                        "description": "Basic connectivity test",
+                        "message": "CORS is working correctly"
+                    },
+                    "endpoint_scan": [
+                        {
+                            "file": "\/auth\/me.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/auth\/login.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/auth\/register.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/login.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/settings.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/unmatched.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/deploy.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/seo.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/stats.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/packages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/diagnose.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/messages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/user\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/seo.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/contact.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/packages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/check-domain.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/test_db.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/cors.php",
+                            "has_cors_include": false,
+                            "has_manual_cors": 1,
+                            "has_options_handler": true,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        }
+                    ]
+                },
+                "error": ""
+            }
+        },
+        {
+            "test": "OPTIONS request from http:\/\/localhost:5173",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 204,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "http:\/\/localhost:5173",
+                    "access-control-allow-credentials": "true",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                    "access-control-max-age": "86400",
+                    "vary": "Origin",
+                    "content-type": "application\/json"
+                },
+                "body": null,
+                "error": ""
+            }
+        },
+        {
+            "test": "OPTIONS request from http:\/\/localhost:4173",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 204,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "http:\/\/localhost:4173",
+                    "access-control-allow-credentials": "true",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                    "access-control-max-age": "86400",
+                    "vary": "Origin",
+                    "content-type": "application\/json"
+                },
+                "body": null,
+                "error": ""
+            }
+        },
+        {
+            "test": "OPTIONS request from https:\/\/bezmidar.de",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 204,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "https:\/\/bezmidar.de",
+                    "access-control-allow-credentials": "true",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                    "access-control-max-age": "86400",
+                    "vary": "Origin",
+                    "content-type": "application\/json"
+                },
+                "body": null,
+                "error": ""
+            }
+        },
+        {
+            "test": "OPTIONS request from https:\/\/www.bezmidar.de",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 204,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "https:\/\/www.bezmidar.de",
+                    "access-control-allow-credentials": "true",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                    "access-control-max-age": "86400",
+                    "vary": "Origin",
+                    "content-type": "application\/json"
+                },
+                "body": null,
+                "error": ""
+            }
+        },
+        {
+            "test": "OPTIONS request from https:\/\/evil-site.com",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 204,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "https:\/\/evil-site.com",
+                    "access-control-allow-credentials": "true",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                    "access-control-max-age": "86400",
+                    "vary": "Origin",
+                    "content-type": "application\/json"
+                },
+                "body": null,
+                "error": ""
+            }
+        },
+        {
+            "test": "Origin http:\/\/localhost:5173 should be allowed",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "http:\/\/localhost:5173",
+                    "access-control-allow-credentials": "true",
+                    "vary": "Origin",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+                    "access-control-max-age": "86400",
+                    "content-type": "application\/json"
+                },
+                "body": {
+                    "success": true,
+                    "packages": []
+                },
+                "error": ""
+            }
+        },
+        {
+            "test": "Origin http:\/\/localhost:4173 should be allowed",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "http:\/\/localhost:4173",
+                    "access-control-allow-credentials": "true",
+                    "vary": "Origin",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+                    "access-control-max-age": "86400",
+                    "content-type": "application\/json"
+                },
+                "body": {
+                    "success": true,
+                    "packages": []
+                },
+                "error": ""
+            }
+        },
+        {
+            "test": "Origin https:\/\/bezmidar.de should be allowed",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "https:\/\/bezmidar.de",
+                    "access-control-allow-credentials": "true",
+                    "vary": "Origin",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+                    "access-control-max-age": "86400",
+                    "content-type": "application\/json"
+                },
+                "body": {
+                    "success": true,
+                    "packages": []
+                },
+                "error": ""
+            }
+        },
+        {
+            "test": "Origin https:\/\/www.bezmidar.de should be allowed",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "https:\/\/www.bezmidar.de",
+                    "access-control-allow-credentials": "true",
+                    "vary": "Origin",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+                    "access-control-max-age": "86400",
+                    "content-type": "application\/json"
+                },
+                "body": {
+                    "success": true,
+                    "packages": []
+                },
+                "error": ""
+            }
+        },
+        {
+            "test": "Origin https:\/\/evil-site.com should be blocked",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+                    "access-control-max-age": "86400",
+                    "content-type": "application\/json"
+                },
+                "body": {
+                    "success": true,
+                    "packages": []
+                },
+                "error": ""
+            }
+        },
+        {
+            "test": "GET request",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "http:\/\/localhost:5173",
+                    "access-control-allow-credentials": "true",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                    "access-control-max-age": "86400",
+                    "vary": "Origin",
+                    "content-type": "application\/json"
+                },
+                "body": {
+                    "success": true,
+                    "timestamp": "2025-11-30 22:57:17",
+                    "test_type": "methods",
+                    "request_info": {
+                        "method": "GET",
+                        "origin": "http:\/\/localhost:5173",
+                        "referer": "not-provided",
+                        "user_agent": "not-provided",
+                        "host": "localhost:8000",
+                        "remote_addr": "::1"
+                    },
+                    "cors_headers_sent": {
+                        "Access-Control-Allow-Origin": "http:\/\/localhost:5173",
+                        "Access-Control-Allow-Credentials": "true",
+                        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                        "Access-Control-Max-Age": "86400",
+                        "Vary": "Origin"
+                    },
+                    "request_headers": {
+                        "HOST": "localhost:8000",
+                        "ACCEPT": "*\/*",
+                        "ORIGIN": "http:\/\/localhost:5173"
+                    },
+                    "server_info": {
+                        "php_version": "8.4.14",
+                        "server_software": "PHP\/8.4.14 (Development Server)",
+                        "document_root": "\/Users\/thomasmuentzer\/Desktop\/wsbusaas\/backend",
+                        "script_filename": "\/Users\/thomasmuentzer\/Desktop\/wsbusaas\/backend\/api\/test\/cors-diagnostics.php"
+                    },
+                    "allowed_origins": [
+                        "https:\/\/bezmidar.de",
+                        "https:\/\/www.bezmidar.de",
+                        "http:\/\/localhost:5173",
+                        "http:\/\/localhost:4173"
+                    ],
+                    "test_details": {
+                        "description": "HTTP methods test",
+                        "method_used": "GET",
+                        "allowed_methods": [
+                            "GET",
+                            "POST",
+                            "PUT",
+                            "DELETE",
+                            "PATCH",
+                            "OPTIONS"
+                        ],
+                        "method_allowed": true
+                    },
+                    "endpoint_scan": [
+                        {
+                            "file": "\/auth\/me.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/auth\/login.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/auth\/register.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/login.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/settings.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/unmatched.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/deploy.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/seo.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/stats.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/packages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/diagnose.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/messages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/user\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/seo.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/contact.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/packages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/check-domain.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/test_db.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/cors.php",
+                            "has_cors_include": false,
+                            "has_manual_cors": 1,
+                            "has_options_handler": true,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        }
+                    ]
+                },
+                "error": ""
+            }
+        },
+        {
+            "test": "POST request",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "http:\/\/localhost:5173",
+                    "access-control-allow-credentials": "true",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                    "access-control-max-age": "86400",
+                    "vary": "Origin",
+                    "content-type": "application\/json"
+                },
+                "body": {
+                    "success": true,
+                    "timestamp": "2025-11-30 22:57:17",
+                    "test_type": "methods",
+                    "request_info": {
+                        "method": "POST",
+                        "origin": "http:\/\/localhost:5173",
+                        "referer": "not-provided",
+                        "user_agent": "not-provided",
+                        "host": "localhost:8000",
+                        "remote_addr": "::1"
+                    },
+                    "cors_headers_sent": {
+                        "Access-Control-Allow-Origin": "http:\/\/localhost:5173",
+                        "Access-Control-Allow-Credentials": "true",
+                        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                        "Access-Control-Max-Age": "86400",
+                        "Vary": "Origin"
+                    },
+                    "request_headers": {
+                        "HOST": "localhost:8000",
+                        "ACCEPT": "*\/*",
+                        "ORIGIN": "http:\/\/localhost:5173"
+                    },
+                    "server_info": {
+                        "php_version": "8.4.14",
+                        "server_software": "PHP\/8.4.14 (Development Server)",
+                        "document_root": "\/Users\/thomasmuentzer\/Desktop\/wsbusaas\/backend",
+                        "script_filename": "\/Users\/thomasmuentzer\/Desktop\/wsbusaas\/backend\/api\/test\/cors-diagnostics.php"
+                    },
+                    "allowed_origins": [
+                        "https:\/\/bezmidar.de",
+                        "https:\/\/www.bezmidar.de",
+                        "http:\/\/localhost:5173",
+                        "http:\/\/localhost:4173"
+                    ],
+                    "test_details": {
+                        "description": "HTTP methods test",
+                        "method_used": "POST",
+                        "allowed_methods": [
+                            "GET",
+                            "POST",
+                            "PUT",
+                            "DELETE",
+                            "PATCH",
+                            "OPTIONS"
+                        ],
+                        "method_allowed": true
+                    },
+                    "endpoint_scan": [
+                        {
+                            "file": "\/auth\/me.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/auth\/login.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/auth\/register.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/login.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/settings.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/unmatched.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/deploy.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/seo.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/stats.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/packages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/diagnose.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/messages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/user\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/seo.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/contact.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/packages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/check-domain.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/test_db.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/cors.php",
+                            "has_cors_include": false,
+                            "has_manual_cors": 1,
+                            "has_options_handler": true,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        }
+                    ]
+                },
+                "error": ""
+            }
+        },
+        {
+            "test": "PUT request",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "http:\/\/localhost:5173",
+                    "access-control-allow-credentials": "true",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                    "access-control-max-age": "86400",
+                    "vary": "Origin",
+                    "content-type": "application\/json"
+                },
+                "body": {
+                    "success": true,
+                    "timestamp": "2025-11-30 22:57:17",
+                    "test_type": "methods",
+                    "request_info": {
+                        "method": "PUT",
+                        "origin": "http:\/\/localhost:5173",
+                        "referer": "not-provided",
+                        "user_agent": "not-provided",
+                        "host": "localhost:8000",
+                        "remote_addr": "::1"
+                    },
+                    "cors_headers_sent": {
+                        "Access-Control-Allow-Origin": "http:\/\/localhost:5173",
+                        "Access-Control-Allow-Credentials": "true",
+                        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                        "Access-Control-Max-Age": "86400",
+                        "Vary": "Origin"
+                    },
+                    "request_headers": {
+                        "HOST": "localhost:8000",
+                        "ACCEPT": "*\/*",
+                        "ORIGIN": "http:\/\/localhost:5173"
+                    },
+                    "server_info": {
+                        "php_version": "8.4.14",
+                        "server_software": "PHP\/8.4.14 (Development Server)",
+                        "document_root": "\/Users\/thomasmuentzer\/Desktop\/wsbusaas\/backend",
+                        "script_filename": "\/Users\/thomasmuentzer\/Desktop\/wsbusaas\/backend\/api\/test\/cors-diagnostics.php"
+                    },
+                    "allowed_origins": [
+                        "https:\/\/bezmidar.de",
+                        "https:\/\/www.bezmidar.de",
+                        "http:\/\/localhost:5173",
+                        "http:\/\/localhost:4173"
+                    ],
+                    "test_details": {
+                        "description": "HTTP methods test",
+                        "method_used": "PUT",
+                        "allowed_methods": [
+                            "GET",
+                            "POST",
+                            "PUT",
+                            "DELETE",
+                            "PATCH",
+                            "OPTIONS"
+                        ],
+                        "method_allowed": true
+                    },
+                    "endpoint_scan": [
+                        {
+                            "file": "\/auth\/me.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/auth\/login.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/auth\/register.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/login.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/settings.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/unmatched.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/deploy.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/seo.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/stats.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/packages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/diagnose.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/messages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/user\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/seo.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/contact.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/packages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/check-domain.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/test_db.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/cors.php",
+                            "has_cors_include": false,
+                            "has_manual_cors": 1,
+                            "has_options_handler": true,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        }
+                    ]
+                },
+                "error": ""
+            }
+        },
+        {
+            "test": "PATCH request",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "http:\/\/localhost:5173",
+                    "access-control-allow-credentials": "true",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                    "access-control-max-age": "86400",
+                    "vary": "Origin",
+                    "content-type": "application\/json"
+                },
+                "body": {
+                    "success": true,
+                    "timestamp": "2025-11-30 22:57:17",
+                    "test_type": "methods",
+                    "request_info": {
+                        "method": "PATCH",
+                        "origin": "http:\/\/localhost:5173",
+                        "referer": "not-provided",
+                        "user_agent": "not-provided",
+                        "host": "localhost:8000",
+                        "remote_addr": "::1"
+                    },
+                    "cors_headers_sent": {
+                        "Access-Control-Allow-Origin": "http:\/\/localhost:5173",
+                        "Access-Control-Allow-Credentials": "true",
+                        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                        "Access-Control-Max-Age": "86400",
+                        "Vary": "Origin"
+                    },
+                    "request_headers": {
+                        "HOST": "localhost:8000",
+                        "ACCEPT": "*\/*",
+                        "ORIGIN": "http:\/\/localhost:5173"
+                    },
+                    "server_info": {
+                        "php_version": "8.4.14",
+                        "server_software": "PHP\/8.4.14 (Development Server)",
+                        "document_root": "\/Users\/thomasmuentzer\/Desktop\/wsbusaas\/backend",
+                        "script_filename": "\/Users\/thomasmuentzer\/Desktop\/wsbusaas\/backend\/api\/test\/cors-diagnostics.php"
+                    },
+                    "allowed_origins": [
+                        "https:\/\/bezmidar.de",
+                        "https:\/\/www.bezmidar.de",
+                        "http:\/\/localhost:5173",
+                        "http:\/\/localhost:4173"
+                    ],
+                    "test_details": {
+                        "description": "HTTP methods test",
+                        "method_used": "PATCH",
+                        "allowed_methods": [
+                            "GET",
+                            "POST",
+                            "PUT",
+                            "DELETE",
+                            "PATCH",
+                            "OPTIONS"
+                        ],
+                        "method_allowed": true
+                    },
+                    "endpoint_scan": [
+                        {
+                            "file": "\/auth\/me.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/auth\/login.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/auth\/register.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/login.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/settings.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/unmatched.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/deploy.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/seo.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/stats.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/packages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/diagnose.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/messages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/user\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/seo.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/contact.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/packages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/check-domain.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/test_db.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/cors.php",
+                            "has_cors_include": false,
+                            "has_manual_cors": 1,
+                            "has_options_handler": true,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        }
+                    ]
+                },
+                "error": ""
+            }
+        },
+        {
+            "test": "DELETE request",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "http:\/\/localhost:5173",
+                    "access-control-allow-credentials": "true",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                    "access-control-max-age": "86400",
+                    "vary": "Origin",
+                    "content-type": "application\/json"
+                },
+                "body": {
+                    "success": true,
+                    "timestamp": "2025-11-30 22:57:17",
+                    "test_type": "methods",
+                    "request_info": {
+                        "method": "DELETE",
+                        "origin": "http:\/\/localhost:5173",
+                        "referer": "not-provided",
+                        "user_agent": "not-provided",
+                        "host": "localhost:8000",
+                        "remote_addr": "::1"
+                    },
+                    "cors_headers_sent": {
+                        "Access-Control-Allow-Origin": "http:\/\/localhost:5173",
+                        "Access-Control-Allow-Credentials": "true",
+                        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                        "Access-Control-Max-Age": "86400",
+                        "Vary": "Origin"
+                    },
+                    "request_headers": {
+                        "HOST": "localhost:8000",
+                        "ACCEPT": "*\/*",
+                        "ORIGIN": "http:\/\/localhost:5173"
+                    },
+                    "server_info": {
+                        "php_version": "8.4.14",
+                        "server_software": "PHP\/8.4.14 (Development Server)",
+                        "document_root": "\/Users\/thomasmuentzer\/Desktop\/wsbusaas\/backend",
+                        "script_filename": "\/Users\/thomasmuentzer\/Desktop\/wsbusaas\/backend\/api\/test\/cors-diagnostics.php"
+                    },
+                    "allowed_origins": [
+                        "https:\/\/bezmidar.de",
+                        "https:\/\/www.bezmidar.de",
+                        "http:\/\/localhost:5173",
+                        "http:\/\/localhost:4173"
+                    ],
+                    "test_details": {
+                        "description": "HTTP methods test",
+                        "method_used": "DELETE",
+                        "allowed_methods": [
+                            "GET",
+                            "POST",
+                            "PUT",
+                            "DELETE",
+                            "PATCH",
+                            "OPTIONS"
+                        ],
+                        "method_allowed": true
+                    },
+                    "endpoint_scan": [
+                        {
+                            "file": "\/auth\/me.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/auth\/login.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/auth\/register.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/login.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/settings.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/unmatched.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/deploy.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/seo.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/stats.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/packages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/diagnose.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/messages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/user\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/seo.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/contact.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/packages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/check-domain.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/test_db.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/cors.php",
+                            "has_cors_include": false,
+                            "has_manual_cors": 1,
+                            "has_options_handler": true,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        }
+                    ]
+                },
+                "error": ""
+            }
+        },
+        {
+            "test": "Custom headers accepted",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "http:\/\/localhost:5173",
+                    "access-control-allow-credentials": "true",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                    "access-control-max-age": "86400",
+                    "vary": "Origin",
+                    "content-type": "application\/json"
+                },
+                "body": {
+                    "success": true,
+                    "timestamp": "2025-11-30 22:57:17",
+                    "test_type": "custom-headers",
+                    "request_info": {
+                        "method": "GET",
+                        "origin": "http:\/\/localhost:5173",
+                        "referer": "not-provided",
+                        "user_agent": "not-provided",
+                        "host": "localhost:8000",
+                        "remote_addr": "::1"
+                    },
+                    "cors_headers_sent": {
+                        "Access-Control-Allow-Origin": "http:\/\/localhost:5173",
+                        "Access-Control-Allow-Credentials": "true",
+                        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, X-Test-Header",
+                        "Access-Control-Max-Age": "86400",
+                        "Vary": "Origin"
+                    },
+                    "request_headers": {
+                        "HOST": "localhost:8000",
+                        "ACCEPT": "*\/*",
+                        "X-TEST-HEADER": "CustomValue",
+                        "X-CUSTOM-HEADER": "TestValue",
+                        "ORIGIN": "http:\/\/localhost:5173"
+                    },
+                    "server_info": {
+                        "php_version": "8.4.14",
+                        "server_software": "PHP\/8.4.14 (Development Server)",
+                        "document_root": "\/Users\/thomasmuentzer\/Desktop\/wsbusaas\/backend",
+                        "script_filename": "\/Users\/thomasmuentzer\/Desktop\/wsbusaas\/backend\/api\/test\/cors-diagnostics.php"
+                    },
+                    "allowed_origins": [
+                        "https:\/\/bezmidar.de",
+                        "https:\/\/www.bezmidar.de",
+                        "http:\/\/localhost:5173",
+                        "http:\/\/localhost:4173"
+                    ],
+                    "test_details": {
+                        "description": "Custom headers test",
+                        "custom_header_received": "CustomValue",
+                        "all_custom_headers": {
+                            "X-TEST-HEADER": "CustomValue",
+                            "X-CUSTOM-HEADER": "TestValue"
+                        }
+                    },
+                    "endpoint_scan": [
+                        {
+                            "file": "\/auth\/me.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/auth\/login.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/auth\/register.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/login.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/settings.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/unmatched.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/deploy.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/seo.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/stats.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/packages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/diagnose.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/messages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/admin\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/user\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/seo.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/contact.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/packages.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/check-domain.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/test_db.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/cors.php",
+                            "has_cors_include": false,
+                            "has_manual_cors": 1,
+                            "has_options_handler": true,
+                            "issue": null
+                        },
+                        {
+                            "file": "\/orders.php",
+                            "has_cors_include": true,
+                            "has_manual_cors": 0,
+                            "has_options_handler": false,
+                            "issue": null
+                        }
+                    ]
+                },
+                "error": ""
+            }
+        },
+        {
+            "test": "Credentials included",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "http:\/\/localhost:5173",
+                    "access-control-allow-credentials": "true",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+                    "access-control-max-age": "86400",
+                    "vary": "Origin",
+                    "content-type": "application\/json",
+                    "set-cookie": "test_cookie=test_value; expires=Sun, 30 Nov 2025 23:57:17 GMT; Max-Age=3600; path=\/; secure; HttpOnly; SameSite=None"
+                },
+                "body": {
+                    "success": true,
+                    "endpoint": "with-cookies",
+                    "method": "GET",
+                    "timestamp": "2025-11-30 22:57:17",
+                    "message": "Cookie set successfully",
+                    "cookies_received": []
+                },
+                "error": ""
+            }
+        },
+        {
+            "test": "GET \/packages",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "http:\/\/localhost:5173",
+                    "access-control-allow-credentials": "true",
+                    "vary": "Origin",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+                    "access-control-max-age": "86400",
+                    "content-type": "application\/json"
+                },
+                "body": {
+                    "success": true,
+                    "packages": []
+                },
+                "error": ""
+            }
+        },
+        {
+            "test": "POST \/check-domain",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "http:\/\/localhost:5173",
+                    "access-control-allow-credentials": "true",
+                    "vary": "Origin",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+                    "access-control-max-age": "86400",
+                    "content-type": "application\/json"
+                },
+                "body": {
+                    "success": true,
+                    "available": false,
+                    "domain": "test.com",
+                    "message": "Bu domain zaten al\u0131nm\u0131\u015f.",
+                    "suggestions": [
+                        "test123.com",
+                        "my-test.com",
+                        "test.net"
+                    ]
+                },
+                "error": ""
+            }
+        },
+        {
+            "test": "POST \/contact",
+            "passed": true,
+            "details": {
+                "success": true,
+                "status": 200,
+                "headers": {
+                    "host": "localhost:8000",
+                    "date": "Sun, 30 Nov 2025 22:57:17 GMT",
+                    "connection": "close",
+                    "x-powered-by": "PHP\/8.4.14",
+                    "access-control-allow-origin": "http:\/\/localhost:5173",
+                    "access-control-allow-credentials": "true",
+                    "vary": "Origin",
+                    "access-control-allow-methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                    "access-control-allow-headers": "Content-Type, Authorization, X-Requested-With",
+                    "access-control-max-age": "86400",
+                    "content-type": "application\/json"
+                },
+                "body": {
+                    "success": true,
+                    "message_id": "3"
+                },
+                "error": ""
+            }
+        }
+    ]
+}
