@@ -8,7 +8,9 @@ use App\Services\JwtService;
 use App\Services\OrderService;
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+$allowedOrigin = $_SERVER['HTTP_ORIGIN'] ?? '*';
+header("Access-Control-Allow-Origin: $allowedOrigin");
+header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
@@ -117,9 +119,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $stmt = $conn->prepare($query);
     $stmt->execute();
     $packages = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     echo json_encode(['success' => true, 'packages' => $packages]);
-    
+
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
     if ($input === null) {
@@ -127,13 +129,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         exit;
     }
     $input = normalizePackageInput($input);
-    
+
     if (empty($input['name']) || empty($input['slug'])) {
         http_response_code(400);
         echo json_encode(['success' => false, 'error' => 'Name and slug are required']);
         exit;
     }
-    
+
     try {
         $query = "INSERT INTO packages (name, slug, description, price, category, payment_link, is_active, display_order) 
                   VALUES (:name, :slug, :description, :price, :category, :payment_link, :is_active, :display_order)";
@@ -147,14 +149,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $stmt->bindValue(':is_active', $input['is_active'], PDO::PARAM_BOOL);
         $stmt->bindValue(':display_order', $input['display_order'], PDO::PARAM_INT);
         $stmt->execute();
-        
+
         $packageId = $conn->lastInsertId();
         echo json_encode(['success' => true, 'package_id' => $packageId]);
     } catch (Exception $e) {
         error_log('packages POST error: ' . $e->getMessage());
         respondJsonError($e->getMessage(), 500);
     }
-    
+
 } elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $rawInput = json_decode(file_get_contents('php://input'), true);
     if ($rawInput === null) {
@@ -163,12 +165,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
     $id = $rawInput['id'] ?? null;
     $input = normalizePackageInput($rawInput);
-    
+
     if (!$id) {
         respondJsonError('Package ID is required', 400);
         exit;
     }
-    
+
     try {
         $query = "UPDATE packages SET 
                   name = :name, 
@@ -191,29 +193,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $stmt->bindValue(':is_active', $input['is_active'], PDO::PARAM_BOOL);
         $stmt->bindValue(':display_order', $input['display_order'], PDO::PARAM_INT);
         $stmt->execute();
-        
+
         echo json_encode(['success' => true]);
     } catch (Exception $e) {
         error_log('packages PUT error: ' . $e->getMessage());
         respondJsonError($e->getMessage(), 500);
     }
-    
+
 } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $input = json_decode(file_get_contents('php://input'), true) ?: [];
     $id = $input['id'] ?? $_GET['id'] ?? null;
-    
+
     if (!$id) {
         http_response_code(400);
         echo json_encode(['success' => false, 'error' => 'Package ID is required']);
         exit;
     }
-    
+
     try {
         $query = "DELETE FROM packages WHERE id = :id";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        
+
         echo json_encode(['success' => true]);
     } catch (Exception $e) {
         http_response_code(500);

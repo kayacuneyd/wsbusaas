@@ -3,9 +3,11 @@ require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/Database.php';
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+$allowedOrigin = $_SERVER['HTTP_ORIGIN'] ?? '*';
+header("Access-Control-Allow-Origin: $allowedOrigin");
+header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
@@ -52,11 +54,13 @@ try {
               VALUES (:name, :email, :subject, :message)";
     $stmt = $conn->prepare($query);
     $stmt->bindParam(':name', $input['name']);
-    $stmt->bindParam(':email', $input['email']);
-    $stmt->bindParam(':subject', $input['subject'] ?? null);
+    $email = $input['email'];
+    $stmt->bindParam(':email', $email);
+    $subject = $input['subject'] ?? null;
+    $stmt->bindParam(':subject', $subject);
     $stmt->bindParam(':message', $input['message']);
     $stmt->execute();
-    
+
     $messageId = $conn->lastInsertId();
     echo json_encode(['success' => true, 'message_id' => $messageId]);
 } catch (Exception $e) {

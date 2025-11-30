@@ -5,7 +5,9 @@ require_once __DIR__ . '/../services/WhoisService.php';
 use App\Services\WhoisService;
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+$allowedOrigin = $_SERVER['HTTP_ORIGIN'] ?? '*';
+header("Access-Control-Allow-Origin: $allowedOrigin");
+header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 

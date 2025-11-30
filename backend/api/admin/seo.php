@@ -6,7 +6,9 @@ require_once __DIR__ . '/../../services/JwtService.php';
 use App\Services\JwtService;
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+$allowedOrigin = $_SERVER['HTTP_ORIGIN'] ?? '*';
+header("Access-Control-Allow-Origin: $allowedOrigin");
+header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
@@ -52,29 +54,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $stmt = $conn->prepare($query);
     $stmt->execute($seoKeys);
     $results = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
-    
+
     $seoSettings = [];
     foreach ($seoKeys as $key) {
         $seoSettings[$key] = $results[$key] ?? '';
     }
-    
+
     echo json_encode(['success' => true, 'settings' => $seoSettings]);
-    
+
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
-    
+
     if (empty($input)) {
         http_response_code(400);
         echo json_encode(['success' => false, 'error' => 'No data provided']);
         exit;
     }
-    
+
     try {
         $conn->beginTransaction();
-        
+
         $query = "INSERT INTO settings (`key`, `value`) VALUES (:key, :value) ON DUPLICATE KEY UPDATE `value` = :value";
         $stmt = $conn->prepare($query);
-        
+
         foreach ($input as $key => $value) {
             if (strpos($key, 'seo_') === 0) {
                 $stmt->bindParam(':key', $key);
@@ -82,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $stmt->execute();
             }
         }
-        
+
         $conn->commit();
         echo json_encode(['success' => true]);
     } catch (Exception $e) {
