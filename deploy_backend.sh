@@ -5,7 +5,7 @@
 SSH_USER="u553245641" # Tahmini kullanıcı adı (DB kullanıcısından alındı)
 SSH_HOST="185.224.137.82" # BURAYI GÜNCELLEYİN (Hostinger IP veya Hostname)
 SSH_PORT="65002" # Hostinger genelde 65002 portunu kullanır
-REMOTE_PATH="/home/u553245641/domains/bezmidar.de/public_html" # BURAYI GÜNCELLEYİN (Hedef klasör)
+REMOTE_PATH="/home/u553245641/domains/bezmidar.de/public_html/api" # BURAYI GÜNCELLEYİN (Hedef klasör)
 SSH_KEY_PATH="hostinger_key" # SSH Key dosyası proje ana dizininde
 
 # Renkler

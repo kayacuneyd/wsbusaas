@@ -6,12 +6,12 @@ const getApiUrl = () => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL;
   }
-  
+
   // Production detection: if we're not on localhost, use production backend
   if (typeof window !== 'undefined' && !window.location.hostname.includes('localhost')) {
-    return 'https://bezmidar.de/api';
+    return 'https://api.bezmidar.de';
   }
-  
+
   // Development default
   return 'http://localhost:8000/api';
 };
