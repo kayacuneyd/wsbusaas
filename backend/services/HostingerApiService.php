@@ -4,24 +4,35 @@ namespace App\Services;
 class HostingerApiService
 {
     private string $mcpEndpoint;
+    private bool $mockMode;
 
     public function __construct()
     {
         $this->mcpEndpoint = $_ENV['MCP_SERVER_URL'] ?? 'https://wsbusaas.vercel.app/api/mcp';
+        $this->mockMode = ($_ENV['MCP_MOCK_MODE'] ?? 'false') === 'true';
     }
 
     public function checkDomainAvailability(string $domain): array
     {
+        if ($this->mockMode) {
+            return ['available' => true, 'domain' => $domain];
+        }
         return $this->callMcp('check_domain_availability', ['domain' => $domain]);
     }
 
     public function createWhoisProfile(array $contactData): array
     {
+        if ($this->mockMode) {
+            return ['id' => 'mock-profile-' . uniqid(), 'status' => 'created'];
+        }
         return $this->callMcp('create_whois_profile', $contactData);
     }
 
     public function purchaseDomain(string $domain, string $whoisProfileId): array
     {
+        if ($this->mockMode) {
+            return ['id' => 'mock-domain-' . uniqid(), 'status' => 'active', 'domain' => $domain];
+        }
         return $this->callMcp('purchase_domain', [
             'domain' => $domain,
             'whois_profile_id' => $whoisProfileId
@@ -30,6 +41,9 @@ class HostingerApiService
 
     public function verifyDomainOwnership(string $domainId): array
     {
+        if ($this->mockMode) {
+            return ['status' => 'active', 'verified' => true];
+        }
         return $this->callMcp('verify_domain', ['domain_id' => $domainId]);
     }
 
@@ -47,6 +61,9 @@ class HostingerApiService
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json'
         ]);
+
+        // Set timeout to avoid long waits
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);

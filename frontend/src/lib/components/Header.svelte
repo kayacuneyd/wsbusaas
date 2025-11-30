@@ -79,7 +79,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </nav>
 
   <!-- Mobile menu -->
   {#if isMobileMenuOpen}

@@ -11,6 +11,7 @@ return [
     'app_url' => $_ENV['APP_URL'] ?? 'https://bezmidar.de/api',
     'frontend_url' => $_ENV['FRONTEND_URL'] ?? 'https://bezmidar.de',
     'webhook_secret' => $_ENV['WEBHOOK_SECRET'] ?? 'your-secret-key',
+    'mcp_mock_mode' => $_ENV['MCP_MOCK_MODE'] ?? 'false',
     'email' => [
         'host' => $_ENV['SMTP_HOST'] ?? 'smtp.gmail.com',
         'port' => $_ENV['SMTP_PORT'] ?? 587,
