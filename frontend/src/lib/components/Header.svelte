@@ -21,38 +21,41 @@
           </a>
         </div>
         <!-- Desktop Navigation -->
-        <nav class="hidden md:flex space-x-8 ml-10">
-          <a href="/" class="text-brand-text hover:text-brand-dark font-medium transition-colors" class:text-brand-dark={$page.url.pathname === '/'}>
+        <div class="hidden md:flex space-x-8 ml-10">
+          <a href="/" class="text-base font-medium text-gray-300 hover:text-white transition-colors">
             {$t('common.home')}
           </a>
-          <a href="/#pricing" class="text-brand-text hover:text-brand-dark font-medium transition-colors">
+          <a href="/#pricing" class="text-base font-medium text-gray-300 hover:text-white transition-colors">
             {$t('common.packages')}
           </a>
-        </nav>
+          <a href="/impressum" class="text-base font-medium text-gray-300 hover:text-white transition-colors">
+            Impressum
+          </a>
+        </div>
       </div>
 
-      <div class="flex items-center space-x-4">
-        <!-- Language Switcher -->
-        <div class="hidden md:block mr-4 border-r border-gray-200 pr-4">
-          <LanguageSwitcher />
-        </div>
+      <div class="flex items-center gap-4">
+        <LanguageSwitcher />
 
-        <div class="hidden md:flex items-center space-x-4">
+        <div class="hidden md:flex items-center gap-4">
           {#if $customerAuth.isAuthenticated}
-            <a href="/dashboard" class="text-brand-text hover:text-brand-dark font-medium transition-colors">
+            <a href="/dashboard" class="text-base font-medium text-gray-300 hover:text-white transition-colors">
               {$t('common.account')}
             </a>
-            <button on:click={() => {
-              customerAuth.set({ isAuthenticated: false, token: null, user: null });
-              window.location.href = '/';
-            }} class="text-red-600 hover:text-red-700 font-medium transition-colors">
+            <button 
+              on:click={() => {
+                customerAuth.set({ isAuthenticated: false, token: null, user: null });
+                window.location.href = '/';
+              }}
+              class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-brand-dark bg-brand-light hover:bg-white"
+            >
               {$t('common.logout')}
             </button>
           {:else}
-            <a href="/login" class="text-brand-text hover:text-brand-dark font-medium transition-colors">
+            <a href="/login" class="whitespace-nowrap text-base font-medium text-gray-300 hover:text-white transition-colors">
               {$t('common.login')}
             </a>
-            <a href="/register" class="bg-brand-dark text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-all shadow-sm">
+            <a href="/register" class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-brand-dark bg-brand-light hover:bg-white">
               {$t('common.register')}
             </a>
           {/if}
