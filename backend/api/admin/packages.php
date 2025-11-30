@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../cors.php';
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../config/Database.php';
 require_once __DIR__ . '/../../services/JwtService.php';
@@ -8,7 +9,6 @@ use App\Services\JwtService;
 use App\Services\OrderService;
 
 header('Content-Type: application/json');
-require_once __DIR__ . '/../cors.php';
 
 function respondJsonError($message, int $code = 500): void
 {
