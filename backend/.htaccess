@@ -20,7 +20,7 @@ RewriteRule ^api/admin/orders/(.*)$ api/admin/orders.php?route=admin/orders/$1 [
 # Route /api/orders/{id} to api/orders.php with route param
 RewriteRule ^api/orders/(.*)$ api/orders.php?route=orders/$1 [L,QSA]
 
-# Route /api/xyz to api/xyz.php
+# Route /api/xyz to api/xyz.php (Only if file exists)
 RewriteCond %{DOCUMENT_ROOT}/api/$1.php -f
 RewriteRule ^api/(.*)$ api/$1.php [L]
 
