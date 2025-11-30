@@ -50,7 +50,7 @@
   }
 
   onMount(loadPackages);
-</script>
+
 
   let showCreateModal = false;
   let newPackage = {
