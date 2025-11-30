@@ -4,8 +4,8 @@
   import { customerAuth } from '$lib/stores/auth';
   import { cart } from '$lib/stores/cart';
 
-  export let domain = '';
-  export let packageType = 'starter';
+  export let price: number | undefined = undefined;
+  export let currency: string | undefined = 'EUR';
 
   let customerName = $customerAuth.user?.full_name || '';
   let customerEmail = $customerAuth.user?.email || '';
@@ -80,6 +80,6 @@
     disabled={loading}
     class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
   >
-    {loading ? 'İşleniyor...' : 'Ödemeye Geç (299€)'}
+    {loading ? 'İşleniyor...' : `Ödemeye Geç (${price ?? '...'} ${currency ?? 'EUR'})`}
   </button>
 </form>

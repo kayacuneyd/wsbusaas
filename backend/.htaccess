@@ -1,0 +1,34 @@
+RewriteEngine On
+RewriteBase /
+
+# Force HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Handle Authorization Header
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Allow access to existing files and directories
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Route /api/admin/orders/{id} to api/admin/orders.php with route param
+RewriteRule ^api/admin/orders/(.*)$ api/admin/orders.php?route=admin/orders/$1 [L,QSA]
+
+# Route /api/orders/{id} to api/orders.php with route param
+RewriteRule ^api/orders/(.*)$ api/orders.php?route=orders/$1 [L,QSA]
+
+# Route /api/xyz to api/xyz.php
+RewriteCond %{DOCUMENT_ROOT}/api/$1.php -f
+RewriteRule ^api/(.*)$ api/$1.php [L]
+
+# Route everything else to index.php (optional, for 404s or root)
+RewriteRule ^$ index.php [L]
+
+# Security
+<FilesMatch "\.(env|config\.php|sql|log)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

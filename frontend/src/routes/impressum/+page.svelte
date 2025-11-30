@@ -7,8 +7,8 @@
 
 <div class="py-12 bg-brand-bg min-h-screen">
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="bg-white shadow-lg rounded-lg overflow-hidden p-8">
-      <h1 class="text-3xl font-bold text-brand-dark mb-6">Impressum</h1>
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg p-8 prose prose-indigo max-w-none">
+      <h1>Impressum</h1>
       
       <div class="prose prose-blue max-w-none text-gray-700">
         <h2 class="text-xl font-semibold text-gray-900 mt-4 mb-2">Angaben gemäß § 5 TMG</h2>

@@ -11,16 +11,13 @@
   }
 </script>
 
-<header class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between h-16">
+<header class="bg-brand-dark shadow-sm sticky top-0 z-50">
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Top">
+    <div class="w-full py-4 flex items-center justify-between border-b border-indigo-500 lg:border-none">
       <div class="flex items-center">
         <div class="flex-shrink-0 flex items-center gap-3">
-          <a href="/" class="flex items-center gap-2 group">
-            <img src="/logo.png" alt="Bezmidar Logo" class="h-10 w-10 transition-transform group-hover:scale-105" />
-            <span class="text-2xl font-bold text-brand-dark group-hover:text-brand-light transition-colors">
-              Bezmidar
-            </span>
+          <a href="/" class="text-2xl font-bold text-white flex items-center gap-2">
+            <span class="text-brand-light">BEZMIDAR</span>
           </a>
         </div>
         <!-- Desktop Navigation -->

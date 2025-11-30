@@ -24,6 +24,7 @@ if ($secret !== $config['webhook_secret']) {
 $input = json_decode(file_get_contents('php://input'), true);
 $orderId = $input['order_id'] ?? '';
 $email = $input['email'] ?? '';
+$customerName = $input['customer_name'] ?? '';
 $paymentStatus = $input['payment_status'] ?? '';
 
 if ($paymentStatus !== 'paid') {
@@ -36,35 +37,71 @@ $orderService = new OrderService();
 $conn = $orderService->conn;
 
 try {
-    // If no Order ID, try to find by email
-    if (empty($orderId) && !empty($email)) {
-        // Find the most recent pending order for this email
-        $query = "SELECT order_id FROM orders WHERE customer_email = :email AND payment_status = 'pending' ORDER BY created_at DESC LIMIT 1";
-        $stmt = $conn->prepare($query);
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    // If no Order ID, try to find by email or name
+    if (empty($orderId)) {
+        if (!empty($email)) {
+            // Find by email
+            $query = "SELECT order_id FROM orders WHERE customer_email = :email AND payment_status = 'pending' ORDER BY created_at DESC LIMIT 1";
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($result)
+                $orderId = $result['order_id'];
+        }
 
-        if ($result) {
-            $orderId = $result['order_id'];
-            // Log that we matched by email
-            $queryLog = "INSERT INTO order_logs (order_id, log_type, message) VALUES (:order_id, 'warning', 'Sipariş ID bulunamadı, Email ile eşleştirildi: $email')";
-            $stmtLog = $conn->prepare($queryLog);
-            $stmtLog->bindParam(':order_id', $orderId);
-            $stmtLog->execute();
+        if (empty($orderId) && !empty($input['customer_name'])) {
+            // Find by Customer Name (Fuzzy match or exact)
+            // We assume the name in Ruul matches the name provided during checkout
+            $name = $input['customer_name'];
+            $query = "SELECT order_id FROM orders WHERE customer_name LIKE :name AND payment_status = 'pending' ORDER BY created_at DESC LIMIT 1";
+            $stmt = $conn->prepare($query);
+            $likeName = "%" . $name . "%";
+            $stmt->bindParam(':name', $likeName);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($result) {
+                $orderId = $result['order_id'];
+                // Log that we matched by name
+                $queryLog = "INSERT INTO order_logs (order_id, log_type, message) VALUES (:order_id, 'warning', 'Sipariş ID bulunamadı, İsim ile eşleştirildi: $name')";
+                $stmtLog = $conn->prepare($queryLog);
+                $stmtLog->bindParam(':order_id', $orderId);
+                $stmtLog->execute();
+            }
         }
     }
 
+    // Ensure unmatched_payments table exists
+    $conn->exec("CREATE TABLE IF NOT EXISTS unmatched_payments (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        customer_name VARCHAR(255),
+        email VARCHAR(255),
+        amount DECIMAL(10,2),
+        currency VARCHAR(10),
+        raw_payload JSON,
+        status ENUM('pending', 'resolved', 'ignored') DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )");
+
     if (empty($orderId)) {
-        // Log to webhook_logs that we couldn't match
-        $query = "INSERT INTO webhook_logs (payload, error_message) VALUES (:payload, 'Order ID or matching Email not found')";
+        // Insert into unmatched_payments
+        $query = "INSERT INTO unmatched_payments (customer_name, email, raw_payload) VALUES (:name, :email, :payload)";
         $stmt = $conn->prepare($query);
         $payloadJson = json_encode($input);
+        $stmt->bindParam(':name', $customerName);
+        $stmt->bindParam(':email', $email);
         $stmt->bindParam(':payload', $payloadJson);
         $stmt->execute();
 
-        http_response_code(404);
-        echo json_encode(['success' => false, 'error' => 'Order not found']);
+        // Log to webhook_logs as well for debugging
+        $queryLog = "INSERT INTO webhook_logs (payload, error_message) VALUES (:payload, 'Unmatched Payment: Saved to review queue')";
+        $stmtLog = $conn->prepare($queryLog);
+        $stmtLog->bindParam(':payload', $payloadJson);
+        $stmtLog->execute();
+
+        // Return 200 so Ruul/Script doesn't retry endlessly
+        echo json_encode(['success' => true, 'message' => 'Payment received but unmatched. Saved to queue.']);
         exit;
     }
 

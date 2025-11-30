@@ -18,8 +18,13 @@ class EmailService
         $this->mailer->SMTPAuth = true;
         $this->mailer->Username = $_ENV['SMTP_USER'];
         $this->mailer->Password = $_ENV['SMTP_PASS'];
-        $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $this->mailer->Port = $_ENV['SMTP_PORT'] ?? 587;
+
+        if ($this->mailer->Port == 465) {
+            $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        } else {
+            $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        }
 
         // Default sender
         $this->mailer->setFrom($_ENV['FROM_EMAIL'], $_ENV['FROM_NAME']);
