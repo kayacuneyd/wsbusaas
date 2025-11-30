@@ -7,7 +7,10 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col md:flex-row justify-between items-center gap-6">
       <div class="text-center md:text-left">
-        <h3 class="text-xl font-bold mb-2">Bezmidar Sitebuilder</h3>
+        <div class="flex items-center justify-center md:justify-start gap-2 mb-4">
+          <img src="/logo.png" alt="Bezmidar Logo" class="h-8 w-8" />
+          <h3 class="text-xl font-bold text-white">Bezmidar</h3>
+        </div>
         <p class="text-gray-400 text-sm">&copy; {year} {$t('common.rights_reserved')}</p>
       </div>
       
