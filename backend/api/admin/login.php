@@ -8,8 +8,9 @@ use App\Services\JwtService;
 use App\Services\Logger;
 
 header('Content-Type: application/json');
-$allowedOrigin = $_ENV['FRONTEND_URL'] ?? '*';
+$allowedOrigin = $_SERVER['HTTP_ORIGIN'] ?? '*';
 header('Access-Control-Allow-Origin: ' . $allowedOrigin);
+header('Access-Control-Allow-Credentials: true');
 header('Vary: Origin');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');

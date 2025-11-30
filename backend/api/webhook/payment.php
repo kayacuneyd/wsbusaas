@@ -94,17 +94,40 @@ try {
     $stmtLog->execute();
 
     // Prepare for website deployment (log for now, can be extended with Hostinger API)
+    // Prepare for website deployment
     if ($domainName) {
-        $deploymentLog = "INSERT INTO order_logs (order_id, log_type, message, details) VALUES (:order_id, 'info', 'Website yükleme süreci başlatıldı', :details)";
-        $stmtDeploy = $conn->prepare($deploymentLog);
-        $deployDetails = json_encode([
-            'domain' => $domainName,
-            'status' => 'pending_deployment',
-            'note' => 'Manuel website yükleme adımları için hazır. Admin dashboard\'dan takip edilebilir.'
-        ]);
-        $stmtDeploy->bindParam(':order_id', $orderId);
-        $stmtDeploy->bindParam(':details', $deployDetails);
-        $stmtDeploy->execute();
+        try {
+            require_once __DIR__ . '/../../services/DeploymentService.php';
+            $deploymentService = new \App\Services\DeploymentService();
+
+            // Create deployment job
+            $jobId = $deploymentService->createDeploymentJob($orderId);
+
+            // Update order with job ID
+            $queryJob = "UPDATE orders SET deployment_job_id = :job_id WHERE order_id = :order_id";
+            $stmtJob = $conn->prepare($queryJob);
+            $stmtJob->execute([':job_id' => $jobId, ':order_id' => $orderId]);
+
+            $deploymentLog = "INSERT INTO order_logs (order_id, log_type, message, details) VALUES (:order_id, 'info', 'Otomatik website kurulumu başlatıldı', :details)";
+            $stmtDeploy = $conn->prepare($deploymentLog);
+            $deployDetails = json_encode([
+                'domain' => $domainName,
+                'job_id' => $jobId,
+                'status' => 'queued'
+            ]);
+            $stmtDeploy->bindParam(':order_id', $orderId);
+            $stmtDeploy->bindParam(':details', $deployDetails);
+            $stmtDeploy->execute();
+
+        } catch (Exception $e) {
+            // Log failure but don't fail the webhook response
+            $errorLog = "INSERT INTO order_logs (order_id, log_type, message, details) VALUES (:order_id, 'error', 'Otomatik kurulum başlatılamadı', :details)";
+            $stmtError = $conn->prepare($errorLog);
+            $errorDetails = json_encode(['error' => $e->getMessage()]);
+            $stmtError->bindParam(':order_id', $orderId);
+            $stmtError->bindParam(':details', $errorDetails);
+            $stmtError->execute();
+        }
     }
 
     echo json_encode(['success' => true, 'domain' => $domainName]);
