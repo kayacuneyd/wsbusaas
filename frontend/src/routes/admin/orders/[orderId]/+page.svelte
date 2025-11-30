@@ -100,6 +100,33 @@
     }
   }
 
+  async function startDeployment() {
+    if (!confirm('Website kurulum sürecini manuel olarak başlatmak istediğinize emin misiniz?')) return;
+
+    updating = true;
+    try {
+      const res = await fetch(`${API_URL}/admin/deploy.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${$adminAuth.token}`
+        },
+        body: JSON.stringify({ order_id: orderId })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('Kurulum süreci başarıyla başlatıldı! İşlem geçmişini takip edebilirsiniz.');
+        loadOrder(); // Reload to see new logs
+      } else {
+        alert(data.error || 'Kurulum başlatılamadı.');
+      }
+    } catch (e) {
+      alert('İşlem başarısız.');
+    } finally {
+      updating = false;
+    }
+  }
+
   function formatDate(value?: string) {
     if (!value) return '—';
     const date = new Date(value);
@@ -169,6 +196,26 @@
               {updating ? 'İşleniyor...' : 'Ödeme Alındı'}
             </button>
             <p class="mt-2 text-xs text-amber-700">Ruul.io ödeme e-postasını aldıysanız, bu butona tıklayarak ödemeyi onaylayabilirsiniz.</p>
+          </dd>
+        </div>
+        {/if}
+
+        {#if (order.order_status ?? order.status) === 'payment_received' || (order.order_status ?? order.status) === 'pending_deployment'}
+        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-blue-50 border-l-4 border-blue-400">
+          <dt class="text-sm font-medium text-blue-800">Kurulum İşlemleri</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <button
+              class="inline-flex items-center gap-2 rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+              on:click={startDeployment}
+              disabled={updating}
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              {updating ? 'Başlatılıyor...' : 'Kurulumu Başlat'}
+            </button>
+            <p class="mt-2 text-xs text-blue-700">Otomatik kurulum başlamadıysa veya hata aldıysa, bu buton ile süreci manuel olarak tetikleyebilirsiniz.</p>
           </dd>
         </div>
         {/if}
