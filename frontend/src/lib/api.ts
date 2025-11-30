@@ -2,18 +2,25 @@
 // Production: Set VITE_API_URL in Vercel environment variables to https://bezmidar.de/api
 // Development: Defaults to localhost:8000
 const getApiUrl = () => {
+  let url = '';
+
   // Check if VITE_API_URL is explicitly set
   if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
+    url = import.meta.env.VITE_API_URL;
+  } else if (typeof window !== 'undefined' && !window.location.hostname.includes('localhost')) {
+    // Production default
+    url = 'https://api.bezmidar.de';
+  } else {
+    // Development default
+    return 'http://localhost:8000/api';
   }
 
-  // Production detection: if we're not on localhost, use production backend
-  if (typeof window !== 'undefined' && !window.location.hostname.includes('localhost')) {
-    return 'https://api.bezmidar.de/api';
+  // Ensure URL ends with /api
+  if (!url.endsWith('/api')) {
+    url += '/api';
   }
 
-  // Development default
-  return 'http://localhost:8000/api';
+  return url;
 };
 
 export const API_URL = getApiUrl();
