@@ -280,13 +280,48 @@
     </div>
   </div>
 
+  <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+    <div class="px-4 py-5 sm:px-6">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">Kurulum Adımları (Deployment Steps)</h3>
+      <p class="mt-1 text-sm text-gray-500">Otomatik kurulum sürecinin detaylı adımları.</p>
+    </div>
+    <div class="border-t border-gray-200">
+      {#if logs.filter(l => l.log_type === 'deployment_step').length > 0}
+        <ul class="divide-y divide-gray-200">
+          {#each logs.filter(l => l.log_type === 'deployment_step') as step}
+            <li class="px-4 py-4 sm:px-6">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  {#if step.message.includes('success')}
+                    <span class="flex-shrink-0 h-2.5 w-2.5 rounded-full bg-green-400" aria-hidden="true"></span>
+                  {:else if step.message.includes('failed')}
+                    <span class="flex-shrink-0 h-2.5 w-2.5 rounded-full bg-red-400" aria-hidden="true"></span>
+                  {:else}
+                    <span class="flex-shrink-0 h-2.5 w-2.5 rounded-full bg-blue-400 animate-pulse" aria-hidden="true"></span>
+                  {/if}
+                  <p class="text-sm font-medium text-gray-900 capitalize">{step.message.replace(/_/g, ' ')}</p>
+                </div>
+                <p class="text-sm text-gray-500">{new Date(step.created_at).toLocaleString()}</p>
+              </div>
+              {#if step.details}
+                <pre class="mt-2 text-xs text-gray-600 bg-gray-50 p-2 rounded overflow-x-auto">{step.details}</pre>
+              {/if}
+            </li>
+          {/each}
+        </ul>
+      {:else}
+        <p class="px-4 py-4 text-sm text-gray-500">Henüz kurulum adımı kaydedilmedi.</p>
+      {/if}
+    </div>
+  </div>
+
   <div class="bg-white shadow overflow-hidden sm:rounded-lg">
     <div class="px-4 py-5 sm:px-6">
-      <h3 class="text-lg leading-6 font-medium text-gray-900">İşlem Geçmişi (Logs)</h3>
+      <h3 class="text-lg leading-6 font-medium text-gray-900">Genel İşlem Geçmişi (Logs)</h3>
     </div>
     <div class="border-t border-gray-200">
       <ul class="divide-y divide-gray-200">
-        {#each logs as log}
+        {#each logs.filter(l => l.log_type !== 'deployment_step') as log}
           <li class="px-4 py-4 sm:px-6">
             <div class="flex items-center justify-between">
               <p class="text-sm font-medium text-gray-900">{log.message}</p>

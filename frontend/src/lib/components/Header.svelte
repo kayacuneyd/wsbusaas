@@ -25,11 +25,14 @@
           <a href="/" class="text-base font-medium text-gray-300 hover:text-white transition-colors">
             {$t('common.home')}
           </a>
+          <a href="/about" class="text-base font-medium text-gray-300 hover:text-white transition-colors">
+            {$t('common.about')}
+          </a>
           <a href="/#pricing" class="text-base font-medium text-gray-300 hover:text-white transition-colors">
             {$t('common.packages')}
           </a>
-          <a href="/impressum" class="text-base font-medium text-gray-300 hover:text-white transition-colors">
-            Impressum
+          <a href="/contact" class="text-base font-medium text-gray-300 hover:text-white transition-colors">
+            {$t('common.contact')}
           </a>
         </div>
       </div>
