@@ -14,15 +14,16 @@ RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Route /api/admin/orders/{id} to api/admin/orders.php with route param
-RewriteRule ^api/admin/orders/(.*)$ api/admin/orders.php?route=admin/orders/$1 [L,QSA]
+# Route /admin/orders/{id} to api/admin/orders.php with route param
+RewriteRule ^admin/orders/(.*)$ api/admin/orders.php?route=admin/orders/$1 [L,QSA]
 
-# Route /api/orders/{id} to api/orders.php with route param
-RewriteRule ^api/orders/(.*)$ api/orders.php?route=orders/$1 [L,QSA]
+# Route /orders/{id} to api/orders.php with route param
+RewriteRule ^orders/(.*)$ api/orders.php?route=orders/$1 [L,QSA]
 
-# Route /api/xyz to api/xyz.php
+# Route /xyz to api/xyz.php
+# Check if the file exists in the api/ directory
 RewriteCond %{DOCUMENT_ROOT}/api/$1.php -f
-RewriteRule ^api/(.*)$ api/$1.php [L]
+RewriteRule ^(.*)$ api/$1.php [L]
 
 # Route everything else to index.php (optional, for 404s or root)
 RewriteRule ^$ index.php [L]
