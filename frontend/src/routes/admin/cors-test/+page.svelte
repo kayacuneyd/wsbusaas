@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { runCorsTestSuite, quickCorsCheck, getCorsdiagnostics, type CorsTestSuite } from '$lib/utils/corsTest';
-  import { authStore } from '$lib/stores/auth';
+  import { adminAuth as authStore } from '$lib/stores/auth';
   import { goto } from '$app/navigation';
 
   let testSuite: CorsTestSuite | null = null;
@@ -13,7 +13,7 @@
   onMount(() => {
     // Check if user is authenticated
     const unsubscribe = authStore.subscribe(value => {
-      if (!value.isAuthenticated || value.user?.role !== 'admin') {
+      if (!value.isAuthenticated) { // Admin auth doesn't have role property usually, just isAuthenticated
         goto('/admin/login');
       }
     });

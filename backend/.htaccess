@@ -1,18 +1,20 @@
 RewriteEngine On
 RewriteBase /
 
-# Force HTTPS
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# --- Global CORS (Apache Level) ---
+# Force CORS headers on all responses, especially OPTIONS
+<IfModule mod_headers.c>
+    SetEnvIf Origin "^http(s)?://(.+\.)?(bezmidar\.de|localhost)(:[0-9]+)?$" C_ORIGIN=$0
+    
+    Header always set Access-Control-Allow-Origin %{C_ORIGIN}e env=C_ORIGIN
+    Header always set Access-Control-Allow-Credentials "true"
+    Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+</IfModule>
 
-# Handle Authorization Header
-RewriteCond %{HTTP:Authorization} .
-RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
-# Allow access to existing files and directories
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^ - [L]
+# Handle OPTIONS method directly to avoid PHP overhead/errors
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ - [R=204,L]
 
 # --- Public Endpoints ---
 RewriteRule ^api/check-domain/?$ api/check-domain.php [L,QSA]
