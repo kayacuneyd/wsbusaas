@@ -1,12 +1,7 @@
 <?php
 // Admin endpoint to manually trigger deployment
-require_once __DIR__ . '/../../config/config.php';
-require_once __DIR__ . '/../../config/Database.php';
-require_once __DIR__ . '/../../services/DeploymentService.php';
 
-header('Content-Type: application/json');
-
-// Robust CORS handling
+// Robust CORS handling - MUST BE FIRST
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 $allowedOrigins = [
     'https://bezmidar.de',
@@ -24,10 +19,15 @@ if (in_array($origin, $allowedOrigins)) {
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 header('Access-Control-Allow-Credentials: true');
+header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
+
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../config/Database.php';
+require_once __DIR__ . '/../../services/DeploymentService.php';
 
 // TODO: Add Admin Authentication Check Here
 // For MVP, we assume this endpoint is protected by .htaccess or similar, 
