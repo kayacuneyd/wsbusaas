@@ -9,7 +9,7 @@ const getApiUrl = () => {
 
   // Production detection: if we're not on localhost, use production backend
   if (typeof window !== 'undefined' && !window.location.hostname.includes('localhost')) {
-    return 'https://api.bezmidar.de';
+    return 'https://api.bezmidar.de/api';
   }
 
   // Development default
