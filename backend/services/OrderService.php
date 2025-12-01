@@ -244,6 +244,24 @@ class OrderService
         if ($stmt->execute()) {
             $this->recordStatusHistory($orderId, $status, $message, $changedBy);
             $this->logOrder($orderId, 'info', 'Durum güncellendi: ' . $status);
+
+            // Send email notification if status is 'processing'
+            if ($status === 'processing') {
+                require_once __DIR__ . '/EmailService.php';
+                $emailService = new EmailService();
+                $order = $this->getOrder($orderId);
+                if ($order) {
+                    $emailService->sendOrderProcessingEmail(
+                        $order['customer_email'],
+                        $order['customer_name'],
+                        $order['domain_name'],
+                        $order['package_type'],
+                        $orderId
+                    );
+                    $this->logOrder($orderId, 'info', 'İşlem bildirimi e-postaları gönderildi.');
+                }
+            }
+
             return $this->getOrderWithStatus($orderId);
         }
 
