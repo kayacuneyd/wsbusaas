@@ -14,7 +14,7 @@
 
   async function loadMessages() {
     try {
-      const res = await fetch(`${API_URL}/admin/messages`, {
+      const res = await fetch(`${API_URL}/admin/messages.php`, {
         headers: { 'Authorization': `Bearer ${$adminAuth.token}` }
       });
       const data = await res.json();
@@ -45,7 +45,7 @@
 
   async function markAsRead(id: number) {
     try {
-      const res = await fetch(`${API_URL}/admin/messages`, {
+      const res = await fetch(`${API_URL}/admin/messages.php`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@
     if (!selectedMessage || !replyText.trim()) return;
 
     try {
-      const res = await fetch(`${API_URL}/admin/messages`, {
+      const res = await fetch(`${API_URL}/admin/messages.php`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

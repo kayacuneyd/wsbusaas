@@ -26,7 +26,7 @@ const getApiUrl = () => {
 export const API_URL = getApiUrl();
 
 export async function checkDomain(domain: string, tld: string) {
-  const response = await fetch(`${API_URL}/check-domain`, {
+  const response = await fetch(`${API_URL}/check-domain.php`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export async function createOrder(data: any, token?: string) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_URL}/orders`, {
+  const response = await fetch(`${API_URL}/orders.php`, {
     method: 'POST',
     headers,
     body: JSON.stringify(data)
@@ -55,7 +55,7 @@ export async function createOrder(data: any, token?: string) {
 }
 
 export async function fetchPackages() {
-  const response = await fetch(`${API_URL}/packages`, {
+  const response = await fetch(`${API_URL}/packages.php`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'

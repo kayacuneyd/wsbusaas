@@ -12,7 +12,7 @@
 
   onMount(async () => {
     try {
-      const res = await fetch(`${API_URL}/admin/stats`, {
+      const res = await fetch(`${API_URL}/admin/stats.php`, {
         headers: {
           'Authorization': `Bearer ${$adminAuth.token}`
         }

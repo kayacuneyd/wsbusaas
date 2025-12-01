@@ -16,7 +16,7 @@ header('Content-Type: application/json');
 $headers = getallheaders();
 $authHeader = $headers['Authorization'] ?? '';
 $token = str_replace('Bearer ', '', $authHeader);
-$payload = JwtService::validate($token);
+$payload = JwtService::decode($token);
 
 if (!$payload || $payload['role'] !== 'admin') {
     http_response_code(401);

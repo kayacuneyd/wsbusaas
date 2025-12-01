@@ -1,5 +1,5 @@
-import { writable } from 'svelte/store';
 import { API_URL } from '$lib/api';
+import { writable } from 'svelte/store';
 
 export interface SEOSettings {
   seo_title: string;
@@ -23,7 +23,7 @@ export const seoSettings = writable<SEOSettings>(defaultSettings);
 
 export async function loadSEOSettings() {
   try {
-    const res = await fetch(`${API_URL}/seo`);
+    const res = await fetch(`${API_URL}/seo.php`);
     if (res.ok) {
       const data = await res.json();
       if (data.success && data.settings) {

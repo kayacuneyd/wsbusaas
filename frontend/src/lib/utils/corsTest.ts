@@ -282,10 +282,10 @@ async function testLargePayload(): Promise<any> {
  */
 async function testExistingEndpoints(): Promise<any> {
   const endpoints = [
-    { path: '/packages', method: 'GET' },
-    { path: '/auth/login', method: 'POST', body: { email: 'test@test.com', password: 'test' } },
-    { path: '/check-domain', method: 'POST', body: { domain: 'test', tld: 'com' } },
-    { path: '/contact', method: 'POST', body: { name: 'Test', email: 'test@test.com', message: 'Test' } }
+    { path: '/packages.php', method: 'GET' },
+    { path: '/auth/login.php', method: 'POST', body: { email: 'test@test.com', password: 'test' } },
+    { path: '/check-domain.php', method: 'POST', body: { domain: 'test', tld: 'com' } },
+    { path: '/contact.php', method: 'POST', body: { name: 'Test', email: 'test@test.com', message: 'Test' } }
   ];
 
   const results: any = {};

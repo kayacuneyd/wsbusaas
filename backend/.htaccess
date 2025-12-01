@@ -1,20 +1,13 @@
+Options -MultiViews
 RewriteEngine On
 RewriteBase /
 
-# --- Global CORS (Apache Level) ---
-# Force CORS headers on all responses, especially OPTIONS
-<IfModule mod_headers.c>
-    SetEnvIf Origin "^http(s)?://(.+\.)?(bezmidar\.de|localhost)(:[0-9]+)?$" C_ORIGIN=$0
-    
-    Header always set Access-Control-Allow-Origin %{C_ORIGIN}e env=C_ORIGIN
-    Header always set Access-Control-Allow-Credentials "true"
-    Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
-</IfModule>
+# --- CORS Handling ---
+# CORS is handled by PHP (api/cors.php) for better control and security
+# We only ensure OPTIONS requests reach PHP
 
-# Handle OPTIONS method directly to avoid PHP overhead/errors
-RewriteCond %{REQUEST_METHOD} OPTIONS
-RewriteRule ^(.*)$ - [R=204,L]
+# Pass OPTIONS requests to PHP instead of blocking them
+# This allows cors.php to handle them properly
 
 # --- Public Endpoints ---
 RewriteRule ^api/check-domain/?$ api/check-domain.php [L,QSA]
@@ -63,3 +56,7 @@ RewriteRule ^$ index.php [L]
     Order allow,deny
     Deny from all
 </FilesMatch>
+
+# Generic fallback: append .php if file exists
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteRule ^(.*)$ $1.php [L,QSA]

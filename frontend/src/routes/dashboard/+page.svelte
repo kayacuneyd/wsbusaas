@@ -22,7 +22,7 @@
     }
 
     try {
-      const res = await fetch(`${API_URL}/user/orders`, {
+      const res = await fetch(`${API_URL}/user/orders.php`, {
         headers: {
           'Authorization': `Bearer ${$customerAuth.token}`
         }

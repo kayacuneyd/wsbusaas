@@ -26,7 +26,7 @@
 
   async function loadOrder() {
     try {
-      const res = await fetch(`${API_URL}/admin/orders/${orderId}`, {
+      const res = await fetch(`${API_URL}/admin/orders.php?route=admin/orders/${orderId}`, {
         headers: { 'Authorization': `Bearer ${$adminAuth.token}` }
       });
       const data = await res.json();
@@ -48,7 +48,7 @@
 
     updating = true;
     try {
-      const res = await fetch(`${API_URL}/admin/orders/${orderId}`, {
+      const res = await fetch(`${API_URL}/admin/orders.php?route=admin/orders/${orderId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -76,7 +76,7 @@
 
     updating = true;
     try {
-      const res = await fetch(`${API_URL}/admin/orders/${orderId}`, {
+      const res = await fetch(`${API_URL}/admin/orders.php?route=admin/orders/${orderId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

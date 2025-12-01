@@ -15,7 +15,7 @@
     success = false;
 
     try {
-      const res = await fetch(`${API_URL}/contact`, {
+      const res = await fetch(`${API_URL}/contact.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, subject, message })

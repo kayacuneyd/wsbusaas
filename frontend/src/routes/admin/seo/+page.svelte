@@ -21,7 +21,7 @@
 
   async function loadSettings() {
     try {
-      const res = await fetch(`${API_URL}/admin/seo`, {
+      const res = await fetch(`${API_URL}/admin/seo.php`, {
         headers: { 'Authorization': `Bearer ${$adminAuth.token}` }
       });
       const data = await res.json();
@@ -40,7 +40,7 @@
     success = false;
 
     try {
-      const res = await fetch(`${API_URL}/admin/seo`, {
+      const res = await fetch(`${API_URL}/admin/seo.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -9,7 +9,7 @@
 
   onMount(async () => {
     try {
-      const res = await fetch(`${API_URL}/admin/orders`, {
+      const res = await fetch(`${API_URL}/admin/orders.php`, {
         headers: {
           'Authorization': `Bearer ${$adminAuth.token}`
         }

@@ -13,7 +13,7 @@
     error = '';
 
     try {
-      const res = await fetch(`${API_URL}/admin/login`, {
+      const res = await fetch(`${API_URL}/admin/login.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })

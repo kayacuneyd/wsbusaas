@@ -12,7 +12,7 @@
 
   onMount(async () => {
     try {
-      const res = await fetch(`${API_URL}/admin/settings`, {
+      const res = await fetch(`${API_URL}/admin/settings.php`, {
         headers: { 'Authorization': `Bearer ${$adminAuth.token}` }
       });
       const data = await res.json();
@@ -30,7 +30,7 @@
     saving = true;
     message = '';
     try {
-      const res = await fetch(`${API_URL}/admin/settings`, {
+      const res = await fetch(`${API_URL}/admin/settings.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
