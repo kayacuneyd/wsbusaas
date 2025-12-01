@@ -129,7 +129,7 @@ class EmailService
             $this->mailer->send();
 
             // 2. Send to Admin (Notification)
-            $adminEmail = $_ENV['ADMIN_EMAIL'] ?? 'admin@bezmidar.de'; // Fallback or env
+            $adminEmail = $_ENV['SMTP_USER'] ?? 'kayacuneyd@gmail.com'; // Fallback or env
             $this->mailer->clearAddresses();
             $this->mailer->addAddress($adminEmail, 'Admin');
             $this->mailer->Subject = "[Admin] Sipariş İşleme Alındı - $domain";
